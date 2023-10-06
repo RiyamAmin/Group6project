@@ -18,7 +18,7 @@ View(mySubset)
 
 #########################
 
-##Joud - Data cleaning
+## Joud - Data cleaning
 ## Importing the data set and viewing it
 CancerSet = read.csv('cancer.csv')
 View(CancerSet)
