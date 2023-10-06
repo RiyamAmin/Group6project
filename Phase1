@@ -16,3 +16,160 @@ mySubset <- cancer.patient.data.sets[, c(2,3,4,9,26)]
 
 View(mySubset)
 
+#########################
+
+##Joud - Data cleaning
+## Importing the data set and viewing it
+CancerSet = read.csv('cancer.csv')
+View(CancerSet)
+
+
+## Detecting null values, FALSE means no null, TRUE means null
+## There is no null values in our data, thus we don't need to replace it with the average value
+is.na(CancerSet)
+sum(is.na(CancerSet))
+
+
+## Detecting Outliers
+## TRUE represents outlier, FALSE represents non-outlier
+
+OutAge = outlier(CancerSet$Age, logical = TRUE)
+sum(OutAge)
+Find_outlier = which(OutAge == TRUE, arr.ind = TRUE)
+OutAge
+Find_outlier
+
+OutGender = outlier(CancerSet$Gender, logical = TRUE)
+sum(OutGender)
+Find_outlier = which(OutGender == TRUE, arr.ind = TRUE)
+OutGender
+Find_outlier
+
+OutAirP = outlier(CancerSet$Air.Pollution, logical = TRUE)
+sum(OutAirP)
+Find_outlier = which(OutAirP == TRUE, arr.ind = TRUE)
+OutAirP
+Find_outlier
+
+OutAlcohol = outlier(CancerSet$Alcohol.use, logical = TRUE)
+sum(OutAlcohol)
+Find_outlier = which(OutAlcohol == TRUE, arr.ind = TRUE)
+OutAlcohol
+Find_outlier
+
+OutDust = outlier(CancerSet$Dust.Allergy, logical = TRUE)
+sum(OutDust)
+Find_outlier = which(OutDust == TRUE, arr.ind = TRUE)
+OutDust
+Find_outlier
+
+OutOccu = outlier(CancerSet$OccuPational.Hazards, logical = TRUE)
+sum(OutOccu)
+Find_outlier = which(OutOccu == TRUE, arr.ind = TRUE)
+OutOccu
+Find_outlier
+
+OutGenetic = outlier(CancerSet$Genetic.Risk, logical = TRUE)
+sum(OutGenetic)
+Find_outlier = which(OutGenetic == TRUE, arr.ind = TRUE)
+OutGenetic
+Find_outlier
+
+OutChroncDisease = outlier(CancerSet$chronic.Lung.Disease, logical = TRUE)
+sum(OutChroncDisease)
+Find_outlier = which(OutChroncDisease == TRUE, arr.ind = TRUE)
+OutChroncDisease
+Find_outlier
+
+OutDiet = outlier(CancerSet$Balanced.Diet, logical = TRUE)
+sum(OutDiet)
+Find_outlier = which(OutDiet == TRUE, arr.ind = TRUE)
+OutDiet
+Find_outlier
+
+OutObesity = outlier(CancerSet$Obesity, logical = TRUE)
+sum(OutObesity)
+Find_outlier = which(OutObesity == TRUE, arr.ind = TRUE)
+OutObesity
+Find_outlier
+
+OutSmoking = outlier(CancerSet$Smoking, logical = TRUE)
+sum(OutSmoking)
+Find_outlier = which(OutSmoking == TRUE, arr.ind = TRUE)
+OutSmoking
+Find_outlier
+
+OutPassiveS= outlier(CancerSet$Passive.Smoker, logical = TRUE)
+sum(OutPassiveS)
+Find_outlier = which(OutPassiveS == TRUE, arr.ind = TRUE)
+OutPassiveS
+Find_outlier
+
+OutChestPain = outlier(CancerSet$Chest.Pain, logical = TRUE)
+sum(OutChestPain)
+Find_outlier = which(OutChestPain == TRUE, arr.ind = TRUE)
+OutChestPain
+Find_outlier
+
+OutBloodCoughing = outlier(CancerSet$Coughing.of.Blood, logical = TRUE)
+sum(OutBloodCoughing)
+Find_outlier = which(OutBloodCoughing == TRUE, arr.ind = TRUE)
+OutBloodCoughing
+Find_outlier
+
+OutFatigue = outlier(CancerSet$Fatigue, logical = TRUE)
+sum(OutFatigue)
+Find_outlier = which(OutFatigue == TRUE, arr.ind = TRUE)
+OutFatigue
+Find_outlier
+
+OutWeightLoss = outlier(CancerSet$Weight.Loss, logical = TRUE)
+sum(OutWeightLoss)
+Find_outlier = which(OutWeightLoss == TRUE, arr.ind = TRUE)
+OutWeightLoss
+Find_outlier
+
+OutBreathShortness = outlier(CancerSet$Shortness.of.Breath, logical = TRUE)
+sum(OutBreathShortness)
+Find_outlier = which(OutBreathShortness == TRUE, arr.ind = TRUE)
+OutBreathShortness
+Find_outlier
+
+OutWheezing = outlier(CancerSet$Wheezing, logical = TRUE)
+sum(OutWheezing)
+Find_outlier = which(OutWheezing == TRUE, arr.ind = TRUE)
+OutWheezing
+Find_outlier
+
+OutSwallow = outlier(CancerSet$Swallowing.Difficulty, logical = TRUE)
+sum(OutSwallow)
+Find_outlier = which(OutSwallow == TRUE, arr.ind = TRUE)
+OutSwallow
+Find_outlier
+
+OutClubbing = outlier(CancerSet$Clubbing.of.Finger.Nails, logical = TRUE)
+sum(OutClubbing)Find_outlier = which(OutClubbing == TRUE, arr.ind = TRUE)
+OutClubbing
+Find_outlier
+
+OutCold = outlier(CancerSet$Frequent.Cold, logical = TRUE)
+sum(OutCold)
+Find_outlier = which(OutCold == TRUE, arr.ind = TRUE)
+OutCold
+Find_outlier
+
+OutDryCough = outlier(CancerSet$Dry.Cough, logical = TRUE)
+sum(OutDryCough)
+Find_outlier = which(OutDryCough == TRUE, arr.ind = TRUE)
+OutDryCough
+Find_outlier
+
+OutSnoring = outlier(CancerSet$Snoring, logical = TRUE)
+sum(OutSnoring)
+Find_outlier = which(OutSnoring == TRUE, arr.ind = TRUE)
+OutSnoring
+Find_outlier
+
+## Removing outliers
+CancerSet = CancerSet[-Find_outlier,]
+print(CancerSet)
