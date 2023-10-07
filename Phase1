@@ -39,11 +39,6 @@ Find_outlier = which(OutAge == TRUE, arr.ind = TRUE)
 OutAge
 Find_outlier
 
-OutGender = outlier(CancerSet$Gender, logical = TRUE)
-sum(OutGender)
-Find_outlier = which(OutGender == TRUE, arr.ind = TRUE)
-OutGender
-Find_outlier
 
 OutAirP = outlier(CancerSet$Air.Pollution, logical = TRUE)
 sum(OutAirP)
