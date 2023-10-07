@@ -1,20 +1,23 @@
 # Riyam
 
-cancer.patient.data.sets <- read.csv("cancer patient data sets.csv")
+data <- read.csv("cancer patient data sets.csv")
 # We imported the dataset from our working directory.
 
-str(cancer.patient.data.sets)
+View(data)
+
+str(data)
 # Our dataset has 26 attributes and 1000 observations.
 # Also, every attribue of the dataset is an integer, Patient.Id and Level.
 # Patient.Id is nominal, Age is numiric, Gender is binary and the rest are ordinal.
 
-is.na(cancer.patient.data.sets)
+is.na(data)
 # The dataset has no missing values.
 
-mySubset <- cancer.patient.data.sets[, c(2,3,4,9,26)]
-# We selected the rows 2,3,4,9 and 26 as a sample for our dataset.
+samp <- data[, c(2,3,4,9,12, 13, 26)]
+mySample <- sample_n(samp, 50)
+View(mySample)
+# We selected 50 observations from the attributes 2,3,4,9,12,13 and 26 as a sample for our dataset.
 
-View(mySubset)
 
 #########################
 
