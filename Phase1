@@ -13,13 +13,11 @@ str(data)
 is.na(data)
 # The dataset has no missing values.
 
+library(dplyr)
 samp <- data[, c(2,3,4,9,12, 13, 26)]
 mySample <- sample_n(samp, 50)
 View(mySample)
 # We selected 50 observations from the attributes 2,3,4,9,12,13 and 26 as a sample for our dataset.
-
-![Rplot](https://github.com/RiyamAmin/Group6project/assets/144916235/d389ee61-7faf-4409-a33c-d5121bece103)
-
 
 #########################
 
