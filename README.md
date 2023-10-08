@@ -10,5 +10,3 @@ Ruaa AlOmar,
 Riham Alangari,
 Ashwag Alsubaie,
 Joud Almutairi.
-
-![Rplot](https://github.com/RiyamAmin/Group6project/assets/144916235/b71b3c1b-1b59-45b2-b4bf-47afda869ef2)
