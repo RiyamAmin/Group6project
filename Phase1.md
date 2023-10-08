@@ -19,7 +19,6 @@ mySample <- sample_n(samp, 50)
 View(mySample)
 # We selected 50 observations from the attributes 2,3,4,9,12,13 and 26 as a sample for our dataset.
 
-![Rplot](https://github.com/RiyamAmin/Group6project/assets/144916235/b71b3c1b-1b59-45b2-b4bf-47afda869ef2)
 #########################
 
 ## Joud - Data cleaning
