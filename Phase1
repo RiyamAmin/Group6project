@@ -171,3 +171,14 @@ Find_outlier
 ## Removing outliers
 CancerSet = CancerSet[-Find_outlier,]
 print(CancerSet)
+
+
+###################
+#Riham-statistical measurements 
+#calculating the min 1stQu Median mean 3rdQu and the max
+summary(mydata$Age)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  14.00   27.75   36.00   37.17   45.00   73.00 
+#calculating the variance
+var(mydata$Age)
+[1] 144.1319
