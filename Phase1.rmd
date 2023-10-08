@@ -21,6 +21,73 @@ View(mySample)
 
 #########################
 
+# Ashwag - ?????
+hist(data$Smoking)
+
+# The Histogram shows the level frequency of Smoking in patients.
+# we noticed that the highest frequency was when the level Alcohol use within this rang [1-3] and [7] and it illustrates there is a lot of outliers in the dataset.
+
+hist(data$Alcohol.use)
+
+# The Histogram shows the level frequency of alcohol use in patients.
+# we noticed that the highest frequency was when the level Alcohol use within this rang [1-2] and [7-8]
+
+hist(data$Air.Pollution)
+
+# The Histogram shows the level frequency of Air pollution in patients.
+# we noticed that the highest frequency was when the level Air pollution in the 6  and it illustrates there is a lot of outliers  in the dataset.
+
+data$Gender %>% table() %>% pie()
+# add percentages
+tab <- data$Gender %>% table()
+precentages <- tab %>% prop.table() %>% round(3) * 100 
+txt <- paste0(names(tab), '\n', precentages, '%') # text on chart
+pie(tab, labels=txt) # plot pie chart
+
+# The pie chart shows the Gender of patients.
+
+boxplot(data$Age)
+
+# The age boxplot illustrates there are outlier in age attribute.
+
+plot(data$Dry.Cough, data$Smoking)
+
+# The scatter plot shows that there is no relationship between Dry cough and Smoking.
+
+plot(data$Dust.Allergy, data$Chest.Pain)
+
+# The scatter plot shows that there is no relationship between Dust.Allergy and Chest pain.
+
+plot(data$Air.Pollution, data$Chest.Pain)
+
+# The scatter plot shows that there is no relationship between Air pollution and Chest pain.
+
+boxplot(data$Air.Pollution ~ data$Level)
+
+# The boxplot show there is outliers and Most of the values fall in the medium range and there is no relationship between increasing the level of Air pollution and increasing level of lung cancer.
+
+boxplot(data$Dust.Allergy ~ data$Level)
+
+# The boxplot show there is outliers and Most of the values ​​fall in the medium range and there is no relationship between increasing the level Dust Allergy and increasing level lung cancer.
+
+boxplot(data$Coughing.of.Blood ~ data$Level)
+
+# The boxplot show there is outliers and Most of the values ​​fall in the low range and there is no relationship between increasing the level coughing of blood and increasing level lung cancer.
+
+boxplot(data$Fatigue ~ data$Level)
+
+# The boxplot show there is no outliers and Most of the values ​​fall in the High range and there is a positive relationship between increasing the level fatigue and increasing level lung cancer.
+
+boxplot(data$Shortness.of.Breath ~ data$Level)
+
+# The boxplot show there is outlier and Most of the values ​​fall in the medium range and there is a positive relationship between increasing the level shortness of breath and increasing level lung cancer.
+
+boxplot(data$Wheezing ~ data$Level)
+
+# The boxplot show there is outliers and Most of the values ​​fall in the high range and there is a positive relationship between increasing the level wheezing and increasing level lung cancer.
+
+#########################
+
 ## Joud - Data cleaning
 ## Importing the data set and viewing it
 CancerSet = read.csv('cancer.csv')
