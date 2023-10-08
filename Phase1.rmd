@@ -1,5 +1,5 @@
 # Riyam
-
+![Rplot](https://github.com/RiyamAmin/Group6project/assets/144916235/b71b3c1b-1b59-45b2-b4bf-47afda869ef2)
 data <- read.csv("cancer patient data sets.csv")
 # We imported the dataset from our working directory.
 
