@@ -27,15 +27,15 @@ View(mySample)
 #Riham - statistical measurements 
 
 summary(data$Age)
-#calculating the min, 1st quartile, Median, mean, 3rd quartile, and the max of the age attribute.
+# calculating the min, 1st quartile, Median, mean, 3rd quartile, and the max of the age attribute.
 
 range(data$Age)
-#The ages of the patients falls in the range of 14-73 years old.
+# The ages of the patients falls in the range of 14-73 years old.
 
 var(data$Age)
 sd(data$Age)
-#We calculated the variance of the age attribute which is 144.13, thus the standard devaition is indeed around 12.
-#These values imply that the data is dispersed and is far from the mean, due to the outliers that need to be smoothed later on.
+# We calculated the variance of the age attribute which is 144.13, thus the standard devaition is indeed around 12.
+# These values imply that the data is dispersed and is far from the mean, due to the outliers that need to be smoothed later on.
 
 
 level_factor <- factor(data$Level, ordered = TRUE)
@@ -43,14 +43,14 @@ level_factor <- as.numeric(level_factor)
 # We can't calculate correlation or covariance on non-numeric data, so we converted the Level attribute to an ordered afctor, then to a numeric vector.
 
 cor(level_factor, data$Age)
-#Correlation of Level  and age attributes is positive and above 0.7, hence, the attributes are strongly correlated.
+# Correlation of Level  and age attributes is positive and above 0.7, hence, the attributes are strongly correlated.
 
 
 cor(level_factor, data$Gender)
-#There is a negative correlation between the gender of the patients and the Level of lung cancer, so these variables are independent. 
+# There is a negative correlation between the gender of the patients and the Level of lung cancer, so these variables are independent. 
 
 cor(level_factor, data$Genetic.Risk)
-#There is a strong positive correlation between the Level of lung cancer and the genetic risk, so these variables are dependant.
+# There is a strong positive correlation between the Level of lung cancer and the genetic risk, so these variables are dependant.
 
 cov(level_factor, data$Obesity)
 # Covariance is greater than 1, meaning that Level of lung cancer and the Obesity have a positive linear relationship.
