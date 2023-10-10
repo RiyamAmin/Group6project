@@ -38,16 +38,16 @@ sd(data$Age)
 # These values imply that the data is dispersed and is far from the mean, due to the outliers that need to be smoothed later on.
 
 
-level_factor <- factor(data$Level, ordered = TRUE)
+level_factor <- factor(data$Level,  levels = c("Low","Medium","High"), ordered = TRUE)
+print(level_factor)
 level_factor <- as.numeric(level_factor)
 # We can't calculate correlation or covariance on non-numeric data, so we converted the Level attribute to an ordered afctor, then to a numeric vector.
 
 cor(level_factor, data$Age)
-# Correlation of Level  and age attributes is positive and above 0.7, hence, the attributes are strongly correlated.
-
+# Correlation of Level  and age attributes is positive hence, the attributes are correlated.
 
 cor(level_factor, data$Gender)
-# There is a negative correlation between the gender of the patients and the Level of lung cancer, so these variables are independent. 
+# There is a negative correlation between the gender of the patients and the Level of lung cancer, so these variables are independent, removing Gender attributes is preffered.
 
 cor(level_factor, data$Genetic.Risk)
 # There is a strong positive correlation between the Level of lung cancer and the genetic risk, so these variables are dependant.
@@ -152,8 +152,9 @@ boxplot(data$Wheezing ~ data$Level)
 ## Joud - Data cleaning
 
 
-data <- data[, c(2:26)]
+data <- data[, c(2,3,5:26)]
 ## Removed the index attribute, we already have Patient Id attribute.
+## Removed The Gender attribute since there is a negative correlation between it and the class label.
 
 
 ## Detecting Outliers
