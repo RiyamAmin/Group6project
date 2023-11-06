@@ -17,28 +17,28 @@ The goal of collecting this dataset is to analyze it and study the main reasons 
 Dataset source: https://www.kaggle.com/datasets/thedevastator/cancer-patients-and-air-pollution-a-new-link?resource=download
 
 ## 5- Dataset description:
-|Attribute name    |Description       |Data type         |
+|Attribute name          |Description                                                |Data type   |
 |------------------|------------------|------------------|
-|Age	|The age of the patient.  |(Numeric)|
-|Gender	|The gender of the patient. |(Ordinal)|
-|Air Pollution	|The level of air pollution exposure of the patient. |(Ordinal)|
-|Alcohol use	|The level of alcohol use of the patient. |(Ordinal)|
-|Dust Allergy	|The level of dust allergy of the patient. |(Ordinal)|
-|OccuPational Hazards	|The level of occupational hazards of the patient. |(Ordinal)|
-|Genetic Risk	|The level of genetic risk of the patient. |(Categorical)|
-|Chronic Lung Disease	|The level of chronic lung disease of the patient. |(Ordinal)|
-|Balanced Diet	|The level of balanced diet of the patient. |(Ordinal)|
-|Obesity	|The level of obesity of the patient. |(Ordinal)|
-|Smoking	|The level of smoking of the patient. |(Ordinal)|
-|Passive Smoker	|The level of passive smoker of the patient. |(Ordinal)|
-|Chest Pain	|The level of chest pain of the patient. |(Ordinal)|
-|Coughing of Blood	|The level of coughing of blood of the patient. |(Ordinal)|
-|Fatigue	|The level of fatigue of the patient. |(Ordinal)|
-|Weight Loss	|The level of weight loss of the patient. |(Ordinal)|
-|Shortness of Breath	|The level of shortness of breath of the patient. |(Ordinal)|
-|Wheezing	|The level of wheezing of the patient. |(Ordinal)|
-|Swallowing Difficulty	|The level of swallowing difficulty of the patient. |(Ordinal)|
-|Clubbing of Finger Nails	|The level of clubbing of finger nails of the patient. |(Ordinal)|
+|Age                     |The age of the patient.                                    |Numeric     |
+|Gender	                 |The gender of the patient.                                 |Ordinal     |
+|Air Pollution	         |The level of air pollution exposure of the patient.        |Ordinal     |
+|Alcohol use	           |The level of alcohol use of the patient.                   |Ordinal     |
+|Dust Allergy            |The level of dust allergy of the patient.                  |Ordinal     |
+|OccuPational Hazards	   |The level of occupational hazards of the patient.          |Ordinal     |
+|Genetic Risk	           |The level of genetic risk of the patient.                  |Ordinal     |
+|Chronic Lung Disease	   |The level of chronic lung disease of the patient.          |Ordinal     |
+|Balanced Diet	         |The level of balanced diet of the patient.                 |Ordinal     |
+|Obesity	               |The level of obesity of the patient.                       |Ordinal     |
+|Smoking	               |The level of smoking of the patient.                       |Ordinal     |
+|Passive Smoker	         |The level of passive smoker of the patient.                |Ordinal     |
+|Chest Pain	             |The level of chest pain of the patient.                    |Ordinal     |
+|Coughing of Blood	     |The level of coughing of blood of the patient.             |Ordinal     |
+|Fatigue	               |The level of fatigue of the patient.                       |Ordinal     |
+|Weight Loss	           |The level of weight loss of the patient.                   |Ordinal     |
+|Shortness of Breath	   |The level of shortness of breath of the patient.           |Ordinal     |
+|Wheezing	               |The level of wheezing of the patient.                      |Ordinal     |
+|Swallowing Difficulty	 |The level of swallowing difficulty of the patient.         |Ordinal     |
+|Clubbing of Finger Nails|The level of clubbing of finger nails of the patient.      |Ordinal     |
 
 ## General information:
 Number of attributes: 26 
