@@ -49,6 +49,7 @@ Class label: Level
 ## 6- Importing data
 ### Riyam
 
+```{r}
 setwd("~/IT326 Project")
 data <- read.csv("cancer patient data sets.csv")
 View(data)
@@ -67,7 +68,7 @@ samp <- data[, c(2,3,4,9,12, 13, 26)]
 mySample <- sample_n(samp, 50)
 View(mySample)
 ### We selected 50 observations from the attributes 2,3,4,9,12,13 and 26 as a sample for our dataset.
-
+```
 
 
 ########################
@@ -76,6 +77,7 @@ View(mySample)
 ## 7- statistical measurements 
 ### Riham
 
+```{R}
 summary(data$Age)
 ### calculating the min, 1st quartile, Median, mean, 3rd quartile, and the max of the age attribute.
 
@@ -107,6 +109,8 @@ cov(level_factor, data$Obesity)
 
 cov(level_factor, data$Smoking)
 ### Covariance is greater than 1, meaning that Level of lung cancer and Smoking have a positive linear relationship.
+```
+
 
 ######################
 
@@ -203,7 +207,7 @@ boxplot(data$Wheezing ~ data$Level)
 ## 9- Data cleaning
 ### Joud 
 
-
+```{r}
 data <- data[, c(2,3,5:26)]
 ### Removed the index attribute, we already have Patient Id attribute.
 ### Removed The Gender attribute since there is a negative correlation between it and the class label.
@@ -372,11 +376,14 @@ data = data[-Find_outlier22,]
 
 print(CancerSet)
 ### Printing the data after smoothing.
+```
 
 
 ###################
 
+```{r}
 ## 10- Data transformation
 ### Ruaa 
 
 ### Our dataset has clear data that doesn't need incoding, has balanced values and has no intervals that needs discretization, therefore, our data does not need any transformation.
+```
