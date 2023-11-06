@@ -18,7 +18,7 @@ Dataset source: https://www.kaggle.com/datasets/thedevastator/cancer-patients-an
 
 ## 5- Dataset description:
 |Attribute name|Description|Data type|
-|---|---|---|
+|------------------|------------------|------------------|-------------------|
 |Age	|The age of the patient.  |(Numeric)|
 |Gender	|The gender of the patient. |(Ordinal)|
 |Air Pollution	|The level of air pollution exposure of the patient. |(Ordinal)|
