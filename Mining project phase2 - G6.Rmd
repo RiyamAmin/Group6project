@@ -5,10 +5,11 @@ output: html_notebook
 
 ## 1- Intruduction:
 
+In this lung cancer data mining project, our goal is to analyze the dataset and find the key risk factors associated with the disease. To achieve this, we will employ various data mining techniques including data preprocessing, data analysis, classification methods, and clustering.
 
 ## 2- Problem:
 
-
+In this lung cancer data mining project, our goal is to analyze the dataset and find the key risk factors associated with the disease. To achieve this, we will employ various data mining techniques including data preprocessing, data analysis, classification methods, and clustering. Our dataset contains information on patients with lung cancer, including their age, gender, air pollution exposure, alcohol use, dust allergy, occupational hazards, genetic risk, chronic lung disease, balanced diet, obesity, smoking, passive smoker, chest pain, coughing of blood, fatigue, weight loss, shortness of breath, wheezing, swallowing difficulty, clubbing of finger nails and snoring.
 
 ## 3- Goal:
 The goal of collecting this dataset is to analyze it and study the main reasons of lung cancer and how to treat it.
@@ -206,7 +207,7 @@ boxplot(data$Wheezing ~ data$Level)
 
 ## 9- Data cleaning
 ### Joud 
-
+We recognized the outliers in our dataset and removed them.
 ```{r}
 data <- data[, c(2,3,5:26)]
 ### Removed the index attribute, we already have Patient Id attribute.
