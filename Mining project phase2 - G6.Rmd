@@ -110,10 +110,10 @@ cor(level_factor, data$Age)
 ### Correlation of Level  and age attributes is positive hence, the attributes are correlated.
 
 cor(level_factor, data$Gender)
-### There is a negative correlation between the gender of the patients and the Level of lung cancer, so these variables are independent, removing Gender attributes is preffered.
+### There is a negative correlation between the gender of the patients and the Level of lung cancer, so these variables are independent, removing Gender attributes is preferred.
 
 cor(level_factor, data$Genetic.Risk)
-### There is a strong positive correlation between the Level of lung cancer and the genetic risk, so these variables are dependant.
+### There is a strong positive correlation between the Level of lung cancer and the genetic risk, so these variables are dependent.
 
 cov(level_factor, data$Obesity)
 ### Covariance is greater than 1, meaning that Level of lung cancer and the Obesity have a positive linear relationship.
@@ -460,7 +460,7 @@ id10_tree <- train(
 print(id3_tree)
 print(id5_tree)
 print(id10_tree)
-### Print or store the results of the 3 trees.
+### Print or store the results of the 3 trees (the summary of a CART (Classification and Regression Trees) model trained using the train function with cross-validation).
 ```
 
 ### Initializing 3 more decision tree models with different algorithms, splitting criterion is gain ratio.
