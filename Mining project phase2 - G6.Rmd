@@ -432,7 +432,7 @@ id3_tree <- train(
   y = target[splits],
   method = "rpart",
   parms = list(split = "information"),
-  trControl = trainControl(method = "cv", number = 3)  #### Adjust number for different folds.
+  trControl = trainControl(method = "cv", number = 3 , p = 0.7)  #### Adjust number for different folds.
 )
 
 ### Initialized 3 decision tree models with different algorithms, splitting criterion is the information gain.
@@ -444,7 +444,7 @@ id5_tree <- train(
   y = target[splits],
   method = "rpart",
   parms = list(split = "information"),
-  trControl = trainControl(method = "cv", number = 5)  
+  trControl = trainControl(method = "cv", number = 5 , p = 0.7)  
 )
 
 id10_tree <- train(
@@ -452,7 +452,7 @@ id10_tree <- train(
   y = target[splits],
   method = "rpart",
   parms = list(split = "information"),
-  trControl = trainControl(method = "cv", number = 10)
+  trControl = trainControl(method = "cv", number = 10 , p = 0.7)
 )
 ```
 
