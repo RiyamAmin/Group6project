@@ -435,10 +435,9 @@ id3_tree <- train(
   trControl = trainControl(method = "cv", number = 3)  #### Adjust number for different folds.
 )
 
-### Initialize decision tree models with different algorithms.
+### Initialized 3 decision tree models with different algorithms, splitting criterion is the information gain.
 
-
-### Rinse and repeat:
+### Rinse and repeat to create 2 more trees:
 
 id5_tree <- train(
   x = features[splits, ],
@@ -461,9 +460,12 @@ id10_tree <- train(
 print(id3_tree)
 print(id5_tree)
 print(id10_tree)
-### Print or store the results.
+### Print or store the results of the 3 trees.
 ```
-### repeating the two previous steps:
+
+### Initializing 3 more decision tree models with different algorithms, splitting criterion is gain ratio.
+
+
 ```{r}
 c45_tree3 <- train(
   x = features[splits, ],
@@ -492,8 +494,10 @@ c45_tree10 <- train(
 print(c45_tree3)
 print(c45_tree5)
 print(c45_tree10)
-# Print or store the results.
+### Print or store the results of the 3 trees.
 ```
+
+### Initializing 3 more decision tree models with different algorithms, splitting criterion is the gini index.
 
 ```{r}
 cart_tree3 <- train(
@@ -520,8 +524,13 @@ cart_tree10 <- train(
   trControl = trainControl(method = "cv", number = 3)  # Adjust number for different folds
 )
 
-# Print or store the results
 print(cart_tree3)
 print(cart_tree5)
 print(cart_tree10)
+### Print or store the results of the 3 trees.
 ```
+
+
+###################################
+
+12 - Clustering:
