@@ -427,33 +427,44 @@ str(data)
 ```
 
 ```{r}
+## 3 folds
 id3_tree <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "information"),
-  trControl = trainControl(method = "cv", number = 3 , p = 0.7)  #### Adjust number for different folds.
+  trControl = trainControl(method = "cv", number = 3, p = 0.7),
+  tuneGrid = data.frame(cp = seq(0.01, 0.1, by = 0.01))
 )
 
-### Initialized 3 decision tree models with different algorithms, splitting criterion is the information gain.
+rpart.plot::rpart.plot(id3_tree$finalModel)
 
+### Initialized 3 decision tree models with different algorithms, splitting criterion is the information gain.
 ### Rinse and repeat to create 2 more trees:
 
+## 5 folds
 id5_tree <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "information"),
-  trControl = trainControl(method = "cv", number = 5 , p = 0.7)  
-)
+  trControl = trainControl(method = "cv", number = 5 , p = 0.7),
+  tuneGrid = data.frame(cp = seq(0.01, 0.1, by = 0.01))
+ )
 
+rpart.plot::rpart.plot(id5_tree$finalModel)
+
+## 10 folds
 id10_tree <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "information"),
-  trControl = trainControl(method = "cv", number = 10 , p = 0.7)
-)
+  trControl = trainControl(method = "cv", number = 10 , p = 0.7),
+  tuneGrid = data.frame(cp = seq(0.01, 0.1, by = 0.01))
+ )
+
+rpart.plot::rpart.plot(id10_tree$finalModel)
 ```
 
 ```{r}
@@ -467,29 +478,38 @@ print(id10_tree)
 
 
 ```{r}
+## 3 folds
 c45_tree3 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gain"),
-  trControl = trainControl(method = "cv", number = 3)  ### Adjust number for different folds.
+  trControl = trainControl(method = "cv", number = 3),
+  tuneGrid = data.frame(cp = seq(0.01, 0.1, by = 0.01))### Adjust number for different folds.
 )
+rpart.plot::rpart.plot(c45_tree3$finalModel)
 
+## 5 folds
 c45_tree5 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gain"),
-  trControl = trainControl(method = "cv", number = 5) 
+  trControl = trainControl(method = "cv", number = 5),
+  tuneGrid = data.frame(cp = seq(0.01, 0.1, by = 0.01))
 )
+rpart.plot::rpart.plot(c45_tree5$finalModel)
 
+## 10 folds
 c45_tree10 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gain"),
-  trControl = trainControl(method = "cv", number = 10)
+  trControl = trainControl(method = "cv", number = 10),
+  tuneGrid = data.frame(cp = seq(0.01, 0.1, by = 0.01))
 )
+rpart.plot::rpart.plot(c45_tree10$finalModel)
 
 print(c45_tree3)
 print(c45_tree5)
@@ -500,29 +520,38 @@ print(c45_tree10)
 ### Initializing 3 more decision tree models with different algorithms, splitting criterion is the gini index.
 
 ```{r}
+## 3 folds
 cart_tree3 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gini"),
-  trControl = trainControl(method = "cv", number = 3)  # Adjust number for different folds
+  trControl = trainControl(method = "cv", number = 3), # Adjust number for different folds
+  tuneGrid = data.frame(cp = seq(0.01, 0.1, by = 0.01))
 )
+rpart.plot::rpart.plot(cart_tree3$finalModel)
 
+## 5 folds
 cart_tree5 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gini"),
-  trControl = trainControl(method = "cv", number = 3)  # Adjust number for different folds
+  trControl = trainControl(method = "cv", number = 5),  # Adjust number for different folds
+  tuneGrid = data.frame(cp = seq(0.01, 0.1, by = 0.01))
 )
+rpart.plot::rpart.plot(cart_tree5$finalModel)
 
+## 10 folds
 cart_tree10 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gini"),
-  trControl = trainControl(method = "cv", number = 3)  # Adjust number for different folds
+  trControl = trainControl(method = "cv", number = 10),  # Adjust number for different folds
+  tuneGrid = data.frame(cp = seq(0.01, 0.1, by = 0.01))
 )
+rpart.plot::rpart.plot(cart_tree10$finalModel)
 
 print(cart_tree3)
 print(cart_tree5)
