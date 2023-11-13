@@ -406,9 +406,9 @@ print(data)
 ## 11- Classification
 
 ```{r}
-library(rpart)
+library(rpart.plot)
 library(caret)
-# Load libraries
+### Load libraries.
 ```
 
 ```{r}
@@ -427,139 +427,401 @@ str(data)
 ```
 
 ```{r}
-## 3 folds
 id3_tree <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "information"),
-  trControl = trainControl(method = "cv", number = 3, p = 0.7),
-  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+  trControl = trainControl(method = "cv", number = 3)  #### Adjust number for different folds.
 )
 
-rpart.plot::rpart.plot(id3_tree$finalModel)
-
 ### Initialized 3 decision tree models with different algorithms, splitting criterion is the information gain.
-### Rinse and repeat to create 2 more trees:
 
-## 5 folds
+
+### Rinse and repeat to create 2 more trees:
 id5_tree <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "information"),
-  trControl = trainControl(method = "cv", number = 5 , p = 0.7),
-  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
- )
+  trControl = trainControl(method = "cv", number = 5)  
+)
 
-rpart.plot::rpart.plot(id5_tree$finalModel)
-
-## 10 folds
 id10_tree <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "information"),
-  trControl = trainControl(method = "cv", number = 10 , p = 0.7),
-  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
- )
-
-rpart.plot::rpart.plot(id10_tree$finalModel)
+  trControl = trainControl(method = "cv", number = 10)
+)
 ```
 
 ```{r}
 print(id3_tree)
 print(id5_tree)
 print(id10_tree)
-### Print or store the results of the 3 trees (the summary of a CART (Classification and Regression Trees) model trained using the train function with cross-validation).
+### Print or store the results of the 3 trees.
 ```
+id3_rpart_model_3 <- id3_tree$finalModel
+rpart.plot(id3_rpart_model_3)
+id5_rpart_model_5 <- id5_tree$finalModel
+rpart.plot(id5_rpart_model_5)
+id10_rpart_model_10 <- id10_tree$finalModel
+rpart.plot(id10_rpart_model_10)
 
-### Initializing 3 more decision tree models with different algorithms, splitting criterion is gain ratio.
-
-
+### Initializing 3 more decision tree models with different algorithms, splitting criterion is gain ratio:
 ```{r}
-## 3 folds
 c45_tree3 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gain"),
-  trControl = trainControl(method = "cv", number = 3), # Adjust number for different folds
-  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+  trControl = trainControl(method = "cv", number = 3)  ### Adjust number for different folds.
 )
-rpart.plot::rpart.plot(c45_tree3$finalModel)
 
-## 5 folds
 c45_tree5 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gain"),
-  trControl = trainControl(method = "cv", number = 5),
-  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+  trControl = trainControl(method = "cv", number = 5) 
 )
-rpart.plot::rpart.plot(c45_tree5$finalModel)
 
-## 10 folds
 c45_tree10 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gain"),
-  trControl = trainControl(method = "cv", number = 10),
-  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+  trControl = trainControl(method = "cv", number = 10)
 )
-rpart.plot::rpart.plot(c45_tree10$finalModel)
 
 print(c45_tree3)
 print(c45_tree5)
 print(c45_tree10)
 ### Print or store the results of the 3 trees.
 ```
+c45_rpart_model_3 <- c45_tree3$finalModel
+rpart.plot(c45_rpart_model_3)
+c45_rpart_model_5 <- c45_tree5$finalModel
+rpart.plot(c45_rpart_model_5)
+c45_rpart_model_10 <- c45_tree10$finalModel
+rpart.plot(c45_rpart_model_10)
 
 ### Initializing 3 more decision tree models with different algorithms, splitting criterion is the gini index.
 
 ```{r}
-## 3 folds
 cart_tree3 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gini"),
-  trControl = trainControl(method = "cv", number = 3), # Adjust number for different folds
-  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+  trControl = trainControl(method = "cv", number = 3)  # Adjust number for different folds
 )
-rpart.plot::rpart.plot(cart_tree3$finalModel)
 
-## 5 folds
 cart_tree5 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gini"),
-  trControl = trainControl(method = "cv", number = 5),  # Adjust number for different folds
-  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+  trControl = trainControl(method = "cv", number = 3)  # Adjust number for different folds
 )
-rpart.plot::rpart.plot(cart_tree5$finalModel)
 
-## 10 folds
 cart_tree10 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gini"),
-  trControl = trainControl(method = "cv", number = 10), # Adjust number for different folds
-  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+  trControl = trainControl(method = "cv", number = 3)  # Adjust number for different folds
 )
-rpart.plot::rpart.plot(cart_tree10$finalModel)
 
 print(cart_tree3)
 print(cart_tree5)
 print(cart_tree10)
 ### Print or store the results of the 3 trees.
 ```
+cart_rpart_model_3 <- cart_tree3$finalModel
+rpart.plot(cart_rpart_model_3)
+cart_rpart_model_5 <- cart_tree5$finalModel
+rpart.plot(cart_rpart_model_5)
+cart_rpart_model_10 <- cart_tree10$finalModel
+rpart.plot(cart_rpart_model_10)
+
+
+
 
 
 ###################################
 
-12 - Clustering:
+
+
+
+## 12 - Clustering:
+
+### By applying clustering *unsupervised learning*, we will partition our dataset into groups where the data in the same group are similar to each other and the data from different groups are dissimilar.
+
+```{r}
+library(factoextra)
+library(cluster)
+library(NbClust)
+### Load libraries.
+```
+
+```{r}
+new_data<- data[, c(-1,-24)]
+### Create a new dataset without the "index" and "Patient Id" columns (irrelevant columns (uniqe)) and class attributes ( Level) to find similarities between data.
+print(new_data)
+### Print the new dataset
+```
+
+
+
+### Using k-means method:
+```{r}
+set.seed(8953)
+### setting a seed for random number generation  to make the results reproducible.
+```
+
+```{r}
+### Data types should be transformed into numeric types before clustering.
+new_data <- scale(new_data)
+View(new_data)
+### All data is numeric.
+```
+
+
+### we chose three random numbers which are 2,3,5.
+```{r}
+kmeans.result <- kmeans(new_data, 2)
+### run kmeans clustering to find 2 clusters.
+kmeans.result
+### print the clustering result.
+### Within cluster sum of squares by cluster: 22.1%
+```
+
+```{r}
+# Get the total within-cluster sum of squares (WCSS)
+wcss <- sum(kmeans.result$tot.withinss)
+
+# Print the WCSS
+print(wcss)
+#Within cluster sum of squares by cluster: 15093.78
+```
+### visualize clustering:
+```{r}
+fviz_cluster(kmeans.result, data = new_data) 
+### it is good because there is no overlap between the clusters.
+
+silhouette <- silhouette(kmeans.result$cluster,dist(new_data))
+fviz_silhouette(silhouette)
+### average for each cluster.
+### k-means clustering with estimating k and initializations.
+### The average silhouette width is 0.33, indicating reasonable clustering quality.
+```
+
+```{r}
+### A higher precision indicates more accurate assignments within each cluster, while a higher recall indicates a better ability to capture the true cluster membership.
+cluster_assignments <- c(kmeans.result$cluster)
+ground_truth_labels <- c(data$Level)
+data2 <- data.frame(cluster = cluster_assignments, label = ground_truth_labels)
+
+
+## Function to calculate BCubed precision and recall:
+calculate_bcubed_metrics <- function(data2) {
+  n <- nrow(data2)
+  precision_sum <- 0
+  recall_sum <- 0
+  
+  for (i in 1:n) {
+    cluster <- data2$cluster[i]
+    label <- data2$label[i]
+    
+    ### Count the number of items from the same category within the same cluster:
+    same_category_same_cluster <- sum(data2$label[data2$cluster == cluster] == label)
+    
+    ### Count the total number of items in the same cluster:
+    total_same_cluster <- sum(data2$cluster == cluster)
+    
+    ### Count the total number of items with the same category:
+    total_same_category <- sum(data2$label == label)
+    
+    ### Calculate precision and recall for the current item and add them to the sums:
+    precision_sum <- precision_sum + same_category_same_cluster /total_same_cluster
+    recall_sum <- recall_sum + same_category_same_cluster / total_same_category
+  }
+  
+  ### Calculate average precision and recall:
+  precision <- precision_sum / n
+  recall <- recall_sum / n
+  
+  return(list(precision = precision, recall = recall))
+}
+
+### Calculate BCubed precision and recall:
+metrics <- calculate_bcubed_metrics(data2)
+
+### Extract precision and recall from the metrics:
+precision <- metrics$precision
+recall <- metrics$recall
+
+### Print the results:
+cat("BCubed Precision:", precision, "\n")
+cat("BCubed Recall:", recall, "\n")
+### The BCubed precision is 0.8942521. This indicates that the clustering results have a precision of approximately 0.9, meaning that around 90% of the data points within each cluster are correctly assigned.
+### The BCubed recall is 0.6674904. This suggests that the clustering results have a recall of approximately 0.67, indicating that around 67% of the data points that should belong to the same cluster are correctly assigned to that cluster.
+
+### (highest precision and recall values)
+```
+
+```{r}
+kmeans.result <- kmeans(new_data, 3)
+### Run kmeans clustering to find 3 clusters
+kmeans.result
+### print the clusterng result
+### Within cluster sum of squares by cluster:38.3%.
+```
+
+### visualize clustering:
+```{R}
+fviz_cluster(kmeans.result, data = new_data) 
+### visualization suggests that there is some overlap between clusters, indicating poorer clustering quality(worst)
+
+## Cluster Validation:
+### average for each cluster:
+silhouette <- silhouette(kmeans.result$cluster,dist(new_data))
+fviz_silhouette(silhouette)
+### k-means clustering with estimating k and initializations 
+### The average silhouette width is 0.39, which is lower than for k = 2.
+```
+
+```{r}
+cluster_assignments <- c(kmeans.result$cluster)
+ground_truth_labels <- c(data$Level)
+data2 <- data.frame(cluster = cluster_assignments, label = ground_truth_labels)
+
+### Function to calculate BCubed precision and recall:
+calculate_bcubed_metrics <- function(data2) {
+  n <- nrow(data2)
+  precision_sum <- 0
+  recall_sum <- 0
+  
+  for (i in 1:n) {
+    cluster <- data2$cluster[i]
+    label <- data2$label[i]
+    
+    ### Count the number of items from the same category within the same cluster:
+    same_category_same_cluster <- sum(data2$label[data2$cluster == cluster] == label)
+    
+    ### Count the total number of items in the same cluster:
+    total_same_cluster <- sum(data2$cluster == cluster)
+    
+    ### Count the total number of items with the same category:
+    total_same_category <- sum(data2$label == label)
+    
+    ### Calculate precision and recall for the current item and add them to the sums:
+    precision_sum <- precision_sum + same_category_same_cluster /total_same_cluster
+    recall_sum <- recall_sum + same_category_same_cluster / total_same_category
+  }
+  
+  ### Calculate average precision and recall:
+  precision <- precision_sum / n
+  recall <- recall_sum / n
+  
+  return(list(precision = precision, recall = recall))
+}
+
+### Calculate BCubed precision and recall:
+metrics <- calculate_bcubed_metrics(data2)
+
+### Extract precision and recall from the metrics:
+precision <- metrics$precision
+recall <- metrics$recall
+
+### Print the results:
+cat("BCubed Precision:", precision, "\n")
+cat("BCubed Recall:", recall, "\n")
+#The BCubed precision is 0.8942521. This indicates that the clustering results have a recall of approximately 0.9, meaning that around 90% of the data points within each cluster are correctly assigned.
+#The BCubed recall is 0.4066986 This indicates that the clustering results have a recall of approximately 0.40, suggesting that around 40% of the data points that should belong to the same cluster are correctly assigned to that cluster.
+```
+
+
+```{r}
+kmeans.result <- kmeans(new_data, 5)
+### Run kmeans clustering to find 4 clusters.
+kmeans.result
+### Print the clustering result.
+### Within cluster sum of squares by cluster:52.8%
+```
+
+### visualize clustering:
+```{r}
+fviz_cluster(kmeans.result, data = new_data)
+### The visualization suggests that there is even more overlap between clusters, indicating further degradation in clustering quality (worst).
+
+
+### Cluster Validation:
+
+### average for each cluster:
+silhouette <- silhouette(kmeans.result$cluster,dist(new_data))
+fviz_silhouette(silhouette)
+### k-means clustering with estimating k and initializations.
+### The average silhouette width is 0.46, which is higher than for k = 2 and k = 3.
+```
+```{r}
+cluster_assignments <- c(kmeans.result$cluster)
+ground_truth_labels <- c(data$Level)
+data2 <- data.frame(cluster = cluster_assignments, label = ground_truth_labels)
+
+## Function to calculate BCubed precision and recall:
+calculate_bcubed_metrics <- function(data2) {
+  n <- nrow(data2)
+  precision_sum <- 0
+  recall_sum <- 0
+  
+  for (i in 1:n) {
+    cluster <- data2$cluster[i]
+    label <- data2$label[i]
+    
+    ### Count the number of items from the same category within the same cluster:
+    same_category_same_cluster <- sum(data2$label[data2$cluster == cluster] == label)
+    
+    ### Count the total number of items in the same cluster:
+    total_same_cluster <- sum(data2$cluster == cluster)
+    
+    ### Count the total number of items with the same category:
+    total_same_category <- sum(data2$label == label)
+    
+    ### Calculate precision and recall for the current item and add them to the sums:
+    precision_sum <- precision_sum + same_category_same_cluster /total_same_cluster
+    recall_sum <- recall_sum + same_category_same_cluster / total_same_category
+  }
+  
+  ### Calculate average precision and recall:
+  precision <- precision_sum / n
+  recall <- recall_sum / n
+  
+  return(list(precision = precision, recall = recall))
+}
+
+### Calculate BCubed precision and recall:
+metrics <- calculate_bcubed_metrics(data2)
+
+### Extract precision and recall from the metrics:
+precision <- metrics$precision
+recall <- metrics$recall
+
+### Print the results:
+cat("BCubed Precision:", precision, "\n")
+cat("BCubed Recall:", recall, "\n")
+
+### The BCubed precision is 0.8942521 This suggests that the clustering results have a precision of approximately 0.9, meaning that around 90% of the data points within each cluster are correctly assigned.
+#The BCubed recall is 0.4066986 This implies that the clustering results have a recall of approximately 0.4, suggesting that around 40% of the data points that should belong to the same cluster are correctly assigned to that cluster.
+```
+
+
+## Optimal number of cluster for all clusters:
+```{r}
+### fviz_nbclust() with silhouette method using library(factoextra) 
+fviz_nbclust(new_data, kmeans, method = "wss")+ labs(subtitle = "Elbow method")
+### the best number of clusters and what will give us the best clusters of our data values is when k=5 from the Elbow method.
+### k = 5 achieves the highest precision and recall values among the tested values of k.
+```
