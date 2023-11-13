@@ -403,12 +403,22 @@ print(data)
 #### Other than that, the data has balanced values and has no intervals that needs discretization, therefore, our data does not need any transformation.
 
 
+
+
 ## 11- Classification
 
+
 ```{r}
+library(party)
 library(rpart.plot)
 library(caret)
 ### Load libraries.
+```
+
+
+```{r}
+set.seed(8953)
+### setting a seed for random number generation  to make the results reproducible.
 ```
 
 ```{r}
@@ -425,129 +435,387 @@ splits <- createDataPartition(target, p = 0.7, list = FALSE)
 str(data)
 ### Summary of the data after partitioning, it still has 24 variables but with 143 observations now.
 ```
-
+### Initialized 9 decision tree models with different algorithms, splitting criterion is the information gain, the first 3 trees has 70% training data.
 ```{r}
+## 3 folds:
 id3_tree <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "information"),
-  trControl = trainControl(method = "cv", number = 3)  #### Adjust number for different folds.
+  trControl = trainControl(method = "cv", number = 3, p = 0.7),
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
 )
 
-### Initialized 3 decision tree models with different algorithms, splitting criterion is the information gain.
+rpart.plot::rpart.plot(id3_tree$finalModel)
+### ploting tree.
 
 
 ### Rinse and repeat to create 2 more trees:
+
+## 5 folds:
 id5_tree <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "information"),
-  trControl = trainControl(method = "cv", number = 5)  
-)
+  trControl = trainControl(method = "cv", number = 5 , p = 0.7),
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+ )
 
+rpart.plot::rpart.plot(id5_tree$finalModel)
+### ploting tree.
+
+## 10 folds:
 id10_tree <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "information"),
-  trControl = trainControl(method = "cv", number = 10)
-)
+  trControl = trainControl(method = "cv", number = 10 , p = 0.7),
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+ )
+
+rpart.plot::rpart.plot(id10_tree$finalModel)
+### ploting tree.
+
+print(id3_tree)
+print(id5_tree)
+print(id10_tree)
+### Print or store the results of the 3 trees (the summary of a CART (Classification and Regression Trees) model trained using the train function with cross-validation).
 ```
+### Initialized another 3 trees, Information gain with 80% training set:
 
 ```{r}
+## 3 folds:
+id3_tree <- train(
+  x = features[splits, ],
+  y = target[splits],
+  method = "rpart",
+  parms = list(split = "information"),
+  trControl = trainControl(method = "cv", number = 3, p = 0.8),
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+)
+
+rpart.plot::rpart.plot(id3_tree$finalModel)
+### ploting tree.
+
+## 5 folds:
+id5_tree <- train(
+  x = features[splits, ],
+  y = target[splits],
+  method = "rpart",
+  parms = list(split = "information"),
+  trControl = trainControl(method = "cv", number = 5 , p = 0.8),
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+ )
+
+rpart.plot::rpart.plot(id5_tree$finalModel)
+### ploting tree.
+
+## 10 folds:
+id10_tree <- train(
+  x = features[splits, ],
+  y = target[splits],
+  method = "rpart",
+  parms = list(split = "information"),
+  trControl = trainControl(method = "cv", number = 10 , p = 0.8),
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+ )
+
+rpart.plot::rpart.plot(id10_tree$finalModel)
+### ploting tree.
+
 print(id3_tree)
 print(id5_tree)
 print(id10_tree)
 ### Print or store the results of the 3 trees.
 ```
-id3_rpart_model_3 <- id3_tree$finalModel
-rpart.plot(id3_rpart_model_3)
-id5_rpart_model_5 <- id5_tree$finalModel
-rpart.plot(id5_rpart_model_5)
-id10_rpart_model_10 <- id10_tree$finalModel
-rpart.plot(id10_rpart_model_10)
 
-### Initializing 3 more decision tree models with different algorithms, splitting criterion is gain ratio:
+### Initialized another 3 trees, Information gain with 90% training set:
 ```{r}
+## 3 folds
+id3_tree <- train(
+  x = features[splits, ],
+  y = target[splits],
+  method = "rpart",
+  parms = list(split = "information"),
+  trControl = trainControl(method = "cv", number = 3, p = 0.9),
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+)
+
+rpart.plot::rpart.plot(id3_tree$finalModel)
+### ploting tree.
+
+## 5 folds
+id5_tree <- train(
+  x = features[splits, ],
+  y = target[splits],
+  method = "rpart",
+  parms = list(split = "information"),
+  trControl = trainControl(method = "cv", number = 5 , p = 0.9),
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+ )
+
+rpart.plot::rpart.plot(id5_tree$finalModel)
+### ploting tree.
+
+## 10 folds
+id10_tree <- train(
+  x = features[splits, ],
+  y = target[splits],
+  method = "rpart",
+  parms = list(split = "information"),
+  trControl = trainControl(method = "cv", number = 10 , p = 0.9),
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
+ )
+
+rpart.plot::rpart.plot(id10_tree$finalModel)
+### ploting tree.
+
+print(id3_tree)
+print(id5_tree)
+print(id10_tree)
+### Print or store the results of the 3 trees.
+```
+
+### Initialized 3 decision tree models with different algorithms, splitting criterion is the gain ratio:
+```{r}
+## 3 folds
 c45_tree3 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gain"),
-  trControl = trainControl(method = "cv", number = 3)  ### Adjust number for different folds.
+  trControl = trainControl(method = "cv", number = 3), # Adjust number for different folds
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
 )
+rpart.plot::rpart.plot(c45_tree3$finalModel)
+### ploting tree.
 
+## 5 folds
 c45_tree5 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gain"),
-  trControl = trainControl(method = "cv", number = 5) 
+  trControl = trainControl(method = "cv", number = 5),
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
 )
+rpart.plot::rpart.plot(c45_tree5$finalModel)
+### ploting tree.
 
+## 10 folds
 c45_tree10 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gain"),
-  trControl = trainControl(method = "cv", number = 10)
+  trControl = trainControl(method = "cv", number = 10),
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
 )
+rpart.plot::rpart.plot(c45_tree10$finalModel)
+### ploting tree.
 
 print(c45_tree3)
 print(c45_tree5)
 print(c45_tree10)
 ### Print or store the results of the 3 trees.
 ```
-c45_rpart_model_3 <- c45_tree3$finalModel
-rpart.plot(c45_rpart_model_3)
-c45_rpart_model_5 <- c45_tree5$finalModel
-rpart.plot(c45_rpart_model_5)
-c45_rpart_model_10 <- c45_tree10$finalModel
-rpart.plot(c45_rpart_model_10)
 
-### Initializing 3 more decision tree models with different algorithms, splitting criterion is the gini index.
+### Initializing 3 more decision tree models with different algorithms, splitting criterion is the gini index:
 
 ```{r}
+## 3 folds
 cart_tree3 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gini"),
-  trControl = trainControl(method = "cv", number = 3)  # Adjust number for different folds
+  trControl = trainControl(method = "cv", number = 3), # Adjust number for different folds
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
 )
+rpart.plot::rpart.plot(cart_tree3$finalModel)
+### ploting tree.
 
+## 5 folds
 cart_tree5 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gini"),
-  trControl = trainControl(method = "cv", number = 3)  # Adjust number for different folds
+  trControl = trainControl(method = "cv", number = 5), # Adjust number for different folds
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
 )
+rpart.plot::rpart.plot(cart_tree5$finalModel)
+### ploting tree.
 
+## 10 folds
 cart_tree10 <- train(
   x = features[splits, ],
   y = target[splits],
   method = "rpart",
   parms = list(split = "gini"),
-  trControl = trainControl(method = "cv", number = 3)  # Adjust number for different folds
+  trControl = trainControl(method = "cv", number = 10), # Adjust number for different folds
+  tuneGrid = data.frame(cp = seq(0.001, 0.1, by = 0.001))
 )
+rpart.plot::rpart.plot(cart_tree10$finalModel)
+### ploting tree.
 
 print(cart_tree3)
 print(cart_tree5)
 print(cart_tree10)
 ### Print or store the results of the 3 trees.
 ```
-cart_rpart_model_3 <- cart_tree3$finalModel
-rpart.plot(cart_rpart_model_3)
-cart_rpart_model_5 <- cart_tree5$finalModel
-rpart.plot(cart_rpart_model_5)
-cart_rpart_model_10 <- cart_tree10$finalModel
-rpart.plot(cart_rpart_model_10)
+
+```{r}
+# Sample split into training and testing sets
+## 70% of the training set
+ind <- sample(2, nrow(data), replace = TRUE, prob = c(0.7, 0.3))
+traindata <- data[ind == 1, ]
+testdata <- data[ind == 2, ]
+
+# Fit conditional inference tree
+actualdata <- Level ~ Age + Air.Pollution + Alcohol.use + Dust.Allergy + OccuPational.Hazards + Genetic.Risk + chronic.Lung.Disease + Balanced.Diet + Obesity + Smoking + Passive.Smoker + Chest.Pain + Coughing.of.Blood + Fatigue + Weight.Loss + Shortness.of.Breath + Wheezing + Swallowing.Difficulty + Clubbing.of.Finger.Nails + Frequent.Cold + Dry.Cough + Snoring
+
+traindata$Level <- as.factor(traindata$Level)
+
+myctree <- ctree(actualdata, data = traindata)
+
+# Print the tree
+plot(myctree)
+
+# Create a contingency table for training data
+table(predict(myctree), traindata$Level)
+
+# Make predictions on the test set
+predicted_values <- predict(myctree, newdata = testdata)
+
+# Create a confusion matrix for the test set
+confusion_matrix <- table(Actual = testdata$Level, Predicted = predicted_values)
+print(confusion_matrix)
+
+# Compute metrics
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+precision <- confusion_matrix[2, 2] / sum(confusion_matrix[, 2])
+sensitivity <- confusion_matrix[2, 2] / sum(confusion_matrix[2, ])
+specificity <- confusion_matrix[1, 1] / sum(confusion_matrix[1, ])
+
+# Print the results
+cat("Accuracy:", accuracy, "\n")
+cat("Precision:", precision, "\n")
+cat("Sensitivity (Recall):", sensitivity, "\n")
+cat("Specificity:", specificity, "\n")
+
+
+```
+
+```{r}
+# Sample split into training and testing sets
+## 90% of the training set
+ind <- sample(2, nrow(data), replace = TRUE, prob = c(0.9, 0.1))
+traindata <- data[ind == 1, ]
+testdata <- data[ind == 2, ]
+
+# Fit conditional inference tree
+actualdata <- Level ~ Age + Air.Pollution + Alcohol.use + Dust.Allergy + OccuPational.Hazards + Genetic.Risk + chronic.Lung.Disease + Balanced.Diet + Obesity + Smoking + Passive.Smoker + Chest.Pain + Coughing.of.Blood + Fatigue + Weight.Loss + Shortness.of.Breath + Wheezing + Swallowing.Difficulty + Clubbing.of.Finger.Nails + Frequent.Cold + Dry.Cough + Snoring
+
+traindata$Level <- as.factor(traindata$Level)
+
+myctree <- ctree(actualdata, data = traindata)
+
+# Print the tree
+plot(myctree)
+
+# Create a contingency table for training data
+table(predict(myctree), traindata$Level)
+
+# Make predictions on the test set
+predicted_values <- predict(myctree, newdata = testdata)
+
+# Create a confusion matrix for the test set
+confusion_matrix <- table(Actual = testdata$Level, Predicted = predicted_values)
+print(confusion_matrix)
+
+# Compute metrics
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+precision <- confusion_matrix[2, 2] / sum(confusion_matrix[, 2])
+sensitivity <- confusion_matrix[2, 2] / sum(confusion_matrix[2, ])
+specificity <- confusion_matrix[1, 1] / sum(confusion_matrix[1, ])
+
+# Print the results
+cat("Accuracy:", accuracy, "\n")
+cat("Precision:", precision, "\n")
+cat("Sensitivity (Recall):", sensitivity, "\n")
+cat("Specificity:", specificity, "\n")
+```
+
+```{r}
+# Sample split into training and testing sets
+## 80% of the training set
+ind <- sample(2, nrow(data), replace = TRUE, prob = c(0.8, 0.2))
+traindata <- data[ind == 1, ]
+testdata <- data[ind == 2, ]
+
+# Fit conditional inference tree
+actualdata <- Level ~ Age + Air.Pollution + Alcohol.use + Dust.Allergy + OccuPational.Hazards + Genetic.Risk + chronic.Lung.Disease + Balanced.Diet + Obesity + Smoking + Passive.Smoker + Chest.Pain + Coughing.of.Blood + Fatigue + Weight.Loss + Shortness.of.Breath + Wheezing + Swallowing.Difficulty + Clubbing.of.Finger.Nails + Frequent.Cold + Dry.Cough + Snoring
+
+traindata$Level <- as.factor(traindata$Level)
+
+myctree <- ctree(actualdata, data = traindata)
+
+# Print the tree
+plot(myctree)
+
+# Create a contingency table for training data
+table(predict(myctree), traindata$Level)
+
+# Make predictions on the test set
+predicted_values <- predict(myctree, newdata = testdata)
+
+# Create a confusion matrix for the test set
+confusion_matrix <- table(Actual = testdata$Level, Predicted = predicted_values)
+print(confusion_matrix)
+
+# Compute metrics
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+precision <- confusion_matrix[2, 2] / sum(confusion_matrix[, 2])
+sensitivity <- confusion_matrix[2, 2] / sum(confusion_matrix[2, ])
+specificity <- confusion_matrix[1, 1] / sum(confusion_matrix[1, ])
+
+# Print the results
+cat("Accuracy:", accuracy, "\n")
+cat("Precision:", precision, "\n")
+cat("Sensitivity (Recall):", sensitivity, "\n")
+cat("Specificity:", specificity,"\n")
+```
+
+## Conclusion:
+We tried 3 different sizes for datasets splitting to create the decision tree
+
+1st tree: 70% Training data, 30% Test data.
+Accuracy :90%
+Precision:NaN
+Sensitivity:0
+Specificity :1
 
 
 
+2ed tree: 80% Training data, 20% Test data.
+Accuracy :100%
+Precision:1
+Sensitivity:1
+Specificity :1
+
+
+
+3ed tree: 90% Training data, 10% Test data.
+Accuracy :98%
+Precision:1
+Sensitivity:1
+Specificity:1
+
+Thus, the best model between them is the 80/20 model with the highest accuracy of 100%.
 
 
 ###################################
@@ -557,7 +825,7 @@ rpart.plot(cart_rpart_model_10)
 
 ## 12 - Clustering:
 
-### By applying clustering *unsupervised learning*, we will partition our dataset into groups where the data in the same group are similar to each other and the data from different groups are dissimilar.
+#### By applying clustering *unsupervised learning*, we will partition our dataset into groups where the data in the same group are similar to each other and the data from different groups are dissimilar.
 
 ```{r}
 library(factoextra)
@@ -825,3 +1093,11 @@ fviz_nbclust(new_data, kmeans, method = "wss")+ labs(subtitle = "Elbow method")
 ### the best number of clusters and what will give us the best clusters of our data values is when k=5 from the Elbow method.
 ### k = 5 achieves the highest precision and recall values among the tested values of k.
 ```
+
+## Conclusion:
+Clustering is unsupervised learning it will group objects in cluster based on similarity and dissimilarity.
+Our model will create a set of clusters for the lung cancer prediction who have similar characteristics, then these clusters will be used to predict new lung cancer prediction  results.
+We used the K-mean algorithm, which is an algorithm that produces K clusters, where each cluster is represented by the center point of the cluster and assigns each object to the nearest cluster.
+Then iteratively recalculates the center and reassigns the object until the center point of each cluster does not change that means the object in the right cluster.
+We tried 3 different K then we calculated the average silhouette width for each K.
+The model that has the optimal number of clusters is 5-Mean since it has the least overlapping between clusters comparing to the other models.
