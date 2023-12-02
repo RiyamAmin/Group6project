@@ -859,7 +859,7 @@ wcss <- sum(kmeans.result$tot.withinss)
 
 # Print the WCSS
 print(wcss)
-#Within cluster sum of squares by cluster:1595.704
+#Within cluster sum of squares by cluster:1595.704,  indicating a good compactness of clusters, and that objects in a cluster are similar to one another
 ```
 
 ### visualize clustering:
@@ -941,7 +941,7 @@ wcss <- sum(kmeans.result$tot.withinss)
 
 # Print the WCSS
 print(wcss)
-#Within cluster sum of squares by cluster: 1259.628
+#Within cluster sum of squares by cluster:1259.628,indicating an intermidiate compactness of clusters, and that objects in a cluster are to some extent similar to one another  m
 ```
 
 ### visualize clustering:
@@ -1021,7 +1021,7 @@ wcss <- sum(kmeans.result$tot.withinss)
 
 # Print the WCSS
 print(wcss)
-#Within cluster sum of squares by cluster:292.5542
+#Within cluster sum of squares by cluster:292.5542 indicating a lower compactness of clusters
 ```
 
 ### visualize clustering:
