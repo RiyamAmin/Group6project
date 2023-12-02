@@ -1,0 +1,1818 @@
+---
+title: "Lung cancer patients"
+output: html_notebook
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+# Data Mining Project - Group 6
+
+## 1- Problem:
+
+In this Data Mining project, we chose "Lung Cancer Prediction" dataset.
+Our goal of collecting this dataset was to analyze it and study the main
+reasons of lung cancer and how to treat it. We need to analyze the
+dataset and find the key risk factors associated with the disease. To
+achieve this, we will emply various data mining techniques including
+data preprocessing, data analysis, classification methods, and
+clustering. Our dataset contains information on patients with lung
+cancer, including their age, gender, air pollution exposure, alcohol
+use, dust allergy, occupational hazards, genetic risk, chronic lung
+disease, balanced diet, obesity, smoking, passive smoker, chest pain,
+coughing of blood, fatigue, weight loss, shortness of breath, wheezing,
+swallowing difficulty, clubbing of finger nails and snoring, we have
+1000 observations to analyze.
+
+## 2- Data Mining Task:
+
+We need to study the relationships between the attributes and their
+affect towards the patient's level of lung cancer.
+
+We will use **classification** based on the class label "Level", it has
+three values: Low, Medium, High. We will also use **clustering** to
+group similar data values together.
+
+## 3- Data:
+
+#### Source:
+
+Kaggle:
+<https://www.kaggle.com/datasets/thedevastator/cancer-patients-and-air-pollution-a-new-link?resource=download>
+
+#### Number of Attributes:
+
+26
+
+#### Number of Observations:
+
+1000
+
+#### Class label: Level
+
+#### Attribute characteristics:
+
++---------------+--------------------------+---------------+
+| Attribute     | Description              | Data type     |
+| name          |                          |               |
++:=============:+:========================:+:=============:+
+| Age           | The age of the patient.  | Numeric       |
++---------------+--------------------------+---------------+
+| Gender        | The gender of the        | Ordinal       |
+|               | patient.                 |               |
++---------------+--------------------------+---------------+
+| Air Pollution | The level of air         | Ordinal       |
+|               | pollution exposure of    |               |
+|               | the patient.             |               |
++---------------+--------------------------+---------------+
+| Alcohol use   | The level of alcohol use | Ordinal       |
+|               | of the patient.          |               |
++---------------+--------------------------+---------------+
+| Dust Allergy  | The level of dust        | Ordinal       |
+|               | allergy of the patient.  |               |
++---------------+--------------------------+---------------+
+| OccuPational  | The level of             | Ordinal       |
+| Hazards       | occupational hazards of  |               |
+|               | the patient.             |               |
++---------------+--------------------------+---------------+
+| Genetic Risk  | The level of genetic     | Ordinal       |
+|               | risk of the patient.     |               |
++---------------+--------------------------+---------------+
+| Chronic Lung  | The level of chronic     | Ordinal       |
+| Disease       | lung disease of the      |               |
+|               | patient.                 |               |
++---------------+--------------------------+---------------+
+| Balanced Diet | The level of balanced    | Ordinal       |
+|               | diet of the patient.     |               |
++---------------+--------------------------+---------------+
+| Obesity       | The level of obesity of  | Ordinal       |
+|               | the patient.             |               |
++---------------+--------------------------+---------------+
+| Smoking       | The level of smoking of  | Ordinal       |
+|               | the patient.             |               |
++---------------+--------------------------+---------------+
+| Passive       | The level of passive     | Ordinal       |
+| Smoker        | smoker of the patient.   |               |
++---------------+--------------------------+---------------+
+| Chest Pain    | The level of chest pain  | Ordinal       |
+|               | of the patient.          |               |
++---------------+--------------------------+---------------+
+| Coughing of   | The level of coughing of | Ordinal       |
+| Blood         | blood of the patient.    |               |
++---------------+--------------------------+---------------+
+| Fatigue       | The level of fatigue of  | Ordinal       |
+|               | the patient.             |               |
++---------------+--------------------------+---------------+
+| Weight Loss   | The level of weight loss | Ordinal       |
+|               | of the patient.          |               |
++---------------+--------------------------+---------------+
+| Shortness of  | The level of shortness   | Ordinal       |
+| Breath        | of breath of the         |               |
+|               | patient.                 |               |
++---------------+--------------------------+---------------+
+| Wheezing      | The level of wheezing of | Ordinal       |
+|               | the patient.             |               |
++---------------+--------------------------+---------------+
+| Swallowing    | The level of swallowing  | Ordinal       |
+| Difficulty    | difficulty of the        |               |
+|               | patient.                 |               |
++---------------+--------------------------+---------------+
+| Clubbing of   | The level of clubbing of | Ordinal       |
+| Finger Nails  | finger nails of the      |               |
+|               | patient.                 |               |
++---------------+--------------------------+---------------+
+
+#### Missing values:
+
+```{r}
+is.na(data)
+### The dataset has no missing values.
+```
+
+There are no missing values.
+
+#### Statistical Measures:
+
+```{R}
+summary(data)
+### calculating the min, 1st quartile, Median, mean, 3rd quartile, and the max of the age attribute.
+```
+
+#### Outliers:
+
+We detected outliers in almost all of our attributes (Excluding "Patient
+Id" and "Level" attributes).
+
+|        Attribute         | Number or outliers |
+|:------------------------:|:------------------:|
+|           Age            |         10         |
+|      Air Pollution       |         19         |
+|       Alcohol use        |        169         |
+|       Dust Allergy       |         60         |
+|   OcuuPAtional Hazards   |         30         |
+|       Genetic Risk       |         40         |
+|   Chronic Lung Disease   |         10         |
+|      Balanced Diet       |         10         |
+|         Obesity          |         20         |
+|         Smoking          |        148         |
+|     Passive Smoking      |         29         |
+|        Chest Pain        |         30         |
+|    Coughing of Blood     |         70         |
+|         Fatigue          |         50         |
+|       Weight Loss        |         51         |
+|   Shortness of Breath    |         40         |
+|         Wheezing         |         10         |
+|  Swallowing Difficulty   |         41         |
+| Clubbing of Finger Nails |         10         |
+|      Frequent Cold       |         10         |
+|        Dry Cough         |         21         |
+|         Snoring          |         31         |
+
+```{r}
+library(outliers)
+
+OutAge = outlier(data$Age, logical = TRUE)
+sum(OutAge)
+### Smoothing outliers when present.
+
+### Repeat process to smooth all outliers in the dataset.
+```
+
+```{r}
+OutAirP = outlier(data$Air.Pollution, logical = TRUE)
+sum(OutAirP)
+
+OutAlcohol = outlier(data$Alcohol.use, logical = TRUE)
+sum(OutAlcohol)
+
+OutDust = outlier(data$Dust.Allergy, logical = TRUE)
+sum(OutDust)
+
+OutOccu = outlier(data$OccuPational.Hazards, logical = TRUE)
+sum(OutOccu)
+
+OutGenetic = outlier(data$Genetic.Risk, logical = TRUE)
+sum(OutGenetic)
+
+OutChroncDisease = outlier(data$chronic.Lung.Disease, logical = TRUE)
+sum(OutChroncDisease)
+
+OutDiet = outlier(data$Balanced.Diet, logical = TRUE)
+sum(OutDiet)
+
+OutObesity = outlier(data$Obesity, logical = TRUE)
+sum(OutObesity)
+
+OutSmoking = outlier(data$Smoking, logical = TRUE)
+sum(OutSmoking)
+
+OutPassiveS= outlier(data$Passive.Smoker, logical = TRUE)
+sum(OutPassiveS)
+
+OutChestPain = outlier(data$Chest.Pain, logical = TRUE)
+sum(OutChestPain)
+
+OutBloodCoughing = outlier(data$Coughing.of.Blood, logical = TRUE)
+sum(OutBloodCoughing)
+
+OutFatigue = outlier(data$Fatigue, logical = TRUE)
+sum(OutFatigue)
+
+OutWeightLoss = outlier(data$Weight.Loss, logical = TRUE)
+sum(OutWeightLoss)
+
+OutBreathShortness = outlier(data$Shortness.of.Breath, logical = TRUE)
+sum(OutBreathShortness)
+
+OutWheezing = outlier(data$Wheezing, logical = TRUE)
+sum(OutWheezing)
+
+OutSwallow = outlier(data$Swallowing.Difficulty, logical = TRUE)
+sum(OutSwallow)
+
+OutClubbing = outlier(data$Clubbing.of.Finger.Nails, logical = TRUE)
+sum(OutClubbing)
+
+OutCold = outlier(data$Frequent.Cold, logical = TRUE)
+sum(OutCold)
+
+OutDryCough = outlier(data$Dry.Cough, logical = TRUE)
+sum(OutDryCough)
+
+OutSnoring = outlier(data$Snoring, logical = TRUE)
+sum(OutSnoring)
+```
+
+#### Plotting Methods:
+
++---------------------------+---------------------------+
+| Graphs                    | Discription               |
++===========================+===========================+
+| ![](images/000018.png)    | The Histogram shows the   |
+|                           | level frequency of        |
+|                           | Smoking in patients.      |
+|                           |                           |
+|                           | We noticed that the       |
+|                           | highest frequency was     |
+|                           | when the level of smoking |
+|                           | of the patient is within  |
+|                           | the range [1-3] and [7]   |
+|                           | and it illustrates there  |
+|                           | is a lot of outliers in   |
+|                           | the dataset.              |
++---------------------------+---------------------------+
+| ![](images/00001a.png)    | The Histogram shows the   |
+|                           | level frequency of        |
+|                           | alcohol use in patients.  |
+|                           |                           |
+|                           | We noticed that the       |
+|                           | highest frequency was     |
+|                           | when the level Alcohol    |
+|                           | use within this range     |
+|                           | [1-2] and [7-8].          |
++---------------------------+---------------------------+
+| ![](images/00001c.png)    | The Histogram shows the   |
+|                           | level frequency of Air    |
+|                           | pollution in patients.    |
+|                           |                           |
+|                           | We noticed that the       |
+|                           | highest frequency was     |
+|                           | when the level Air        |
+|                           | pollution in the 6 and it |
+|                           | illustrates there is a    |
+|                           | lot of outliers in the    |
+|                           | dataset.                  |
++---------------------------+---------------------------+
+| ![](images/000010.png)    | The scatter plot shows    |
+|                           | that there is no relation |
+|                           | between Dry cough and     |
+|                           | Smoking.                  |
++---------------------------+---------------------------+
+| ![](images/000010-04.png) | The scatter plot shows    |
+|                           | that there is no relation |
+|                           | between Dust Allergy and  |
+|                           | Chest pain.               |
++---------------------------+---------------------------+
+| ![](images/000010-03.png) | The scatter plot shows    |
+|                           | that there is no relation |
+|                           | between Air pollution and |
+|                           | Chest pain.               |
++---------------------------+---------------------------+
+| ![](images/00001e.png)    | The age boxplot shows     |
+|                           | that the average age of   |
+|                           | the patients lies between |
+|                           | 30 and 40 years, in       |
+|                           | addition to an outlier in |
+|                           | age attribute.            |
++---------------------------+---------------------------+
+| ![](images/000010-10.png) | The boxplot show there is |
+|                           | outliers and Most of the  |
+|                           | values fall in the medium |
+|                           | range and there is no     |
+|                           | relation between          |
+|                           | increasing the level of   |
+|                           | Air pollution and         |
+|                           | increasing level of lung  |
+|                           | cancer.                   |
++---------------------------+---------------------------+
+| ![](images/000010-11.png) | The boxplot show there is |
+|                           | outliers and Most of the  |
+|                           | values fall in the medium |
+|                           | range and there is a      |
+|                           | relation between          |
+|                           | increasing the level Dust |
+|                           | Allergy and increasing    |
+|                           | level lung cancer.        |
++---------------------------+---------------------------+
+| ![](images/000010-12.png) | The boxplot shows that    |
+|                           | most of the values fall   |
+|                           | in the low range and      |
+|                           | there is a relation       |
+|                           | between increasing the    |
+|                           | level coughing of blood   |
+|                           | and increasing level lung |
+|                           | cancer, there is outliers |
+|                           | too which needs to be     |
+|                           | smoothed.                 |
++---------------------------+---------------------------+
+| ![](images/000010-13.png) | The boxplot show there is |
+|                           | no outliers and Most of   |
+|                           | the values fall in the    |
+|                           | High range and there is a |
+|                           | positive relation between |
+|                           | increasing the level      |
+|                           | fatigue and increasing    |
+|                           | level of lung cancer.     |
++---------------------------+---------------------------+
+| ![](images/000010-14.png) | The boxplot show there is |
+|                           | an outlier and most of    |
+|                           | the values fall in the    |
+|                           | medium range and there is |
+|                           | a positive relation       |
+|                           | between increasing the    |
+|                           | level shortness of breath |
+|                           | and increasing level of   |
+|                           | lung cancer.              |
++---------------------------+---------------------------+
+| ![](images/000010-15.png) | The boxplot show there is |
+|                           | outliers and Most of the  |
+|                           | values fall in the high   |
+|                           | range and there is a      |
+|                           | relation between the      |
+|                           | level wheezing and the    |
+|                           | level of lung cancer.     |
++---------------------------+---------------------------+
+
+```{r}
+hist(data$Smoking)
+hist(data$Alcohol.use)
+hist(data$Air.Pollution)
+
+plot(data$Dry.Cough, data$Smoking)
+plot(data$Dust.Allergy, data$Chest.Pain)
+plot(data$Air.Pollution, data$Chest.Pain)
+
+boxplot(data$Air.Pollution ~ data$Level)
+boxplot(data$Age)
+boxplot(data$Dust.Allergy ~ data$Level)
+boxplot(data$Coughing.of.Blood ~ data$Level)
+boxplot(data$Fatigue ~ data$Level)
+boxplot(data$Shortness.of.Breath ~ data$Level)
+boxplot(data$Wheezing ~ data$Level)
+```
+
+## 4- Data preprocessing
+
+#### Data Integration:
+
+First, we removed the "Index" attribute since we already have the
+"Patient Id" attribute. We also removed the "Gender" attribute since
+there is a negative correlation between it and the class label.
+
+```{r}
+data <- data[, c(2,3,5:26)]
+```
+
+#### Detecting and removing outliers:
+
+We identified all outliers in the "Age" attribute (TRUE represents
+outlier, FALSE represents non-outlier), then we remove the entire row
+that include any outlier.
+
+Rinse and repeat for each attribute (except "Level" attribute).
+
+```{r}
+OutAge = outlier(data$Age, logical = TRUE)
+sum(OutAge)
+Find_outlier1 = which(OutAge == TRUE, arr.ind = TRUE)
+OutAge
+Find_outlier1
+data = data[-Find_outlier1,]
+
+OutAirP = outlier(data$Air.Pollution, logical = TRUE)
+sum(OutAirP)
+Find_outlier2 = which(OutAirP == TRUE, arr.ind = TRUE)
+OutAirP
+Find_outlier2
+data = data[-Find_outlier2,]
+
+OutAlcohol = outlier(data$Alcohol.use, logical = TRUE)
+sum(OutAlcohol)
+Find_outlier3 = which(OutAlcohol == TRUE, arr.ind = TRUE)
+OutAlcohol
+Find_outlier3
+data = data[-Find_outlier3,]
+
+OutDust = outlier(data$Dust.Allergy, logical = TRUE)
+sum(OutDust)
+Find_outlier4 = which(OutDust == TRUE, arr.ind = TRUE)
+OutDust
+Find_outlier4
+data = data[-Find_outlier4,]
+
+OutOccu = outlier(data$OccuPational.Hazards, logical = TRUE)
+sum(OutOccu)
+Find_outlier5 = which(OutOccu == TRUE, arr.ind = TRUE)
+OutOccu
+Find_outlier5
+data = data[-Find_outlier5,]
+
+OutGenetic = outlier(data$Genetic.Risk, logical = TRUE)
+sum(OutGenetic)
+Find_outlier6 = which(OutGenetic == TRUE, arr.ind = TRUE)
+OutGenetic
+Find_outlier6
+data = data[-Find_outlier6,]
+
+OutChroncDisease = outlier(data$chronic.Lung.Disease, logical = TRUE)
+sum(OutChroncDisease)
+Find_outlier7 = which(OutChroncDisease == TRUE, arr.ind = TRUE)
+OutChroncDisease
+Find_outlier7
+data = data[-Find_outlier7,]
+
+OutDiet = outlier(data$Balanced.Diet, logical = TRUE)
+sum(OutDiet)
+Find_outlier8 = which(OutDiet == TRUE, arr.ind = TRUE)
+OutDiet
+Find_outlier8
+data = data[-Find_outlier8,]
+
+OutObesity = outlier(data$Obesity, logical = TRUE)
+sum(OutObesity)
+Find_outlier9 = which(OutObesity == TRUE, arr.ind = TRUE)
+OutObesity
+Find_outlier9
+data = data[-Find_outlier9,]
+
+OutSmoking = outlier(data$Smoking, logical = TRUE)
+sum(OutSmoking)
+Find_outlier10 = which(OutSmoking == TRUE, arr.ind = TRUE)
+OutSmoking
+Find_outlier10
+data = data[-Find_outlier10,]
+
+OutPassiveS= outlier(data$Passive.Smoker, logical = TRUE)
+sum(OutPassiveS)
+Find_outlier11 = which(OutPassiveS == TRUE, arr.ind = TRUE)
+OutPassiveS
+Find_outlier11
+data = data[-Find_outlier11,]
+
+OutChestPain = outlier(data$Chest.Pain, logical = TRUE)
+sum(OutChestPain)
+Find_outlier12 = which(OutChestPain == TRUE, arr.ind = TRUE)
+OutChestPain
+Find_outlier12
+data = data[-Find_outlier12,]
+
+OutBloodCoughing = outlier(data$Coughing.of.Blood, logical = TRUE)
+sum(OutBloodCoughing)
+Find_outlier13 = which(OutBloodCoughing == TRUE, arr.ind = TRUE)
+OutBloodCoughing
+Find_outlier13
+data = data[-Find_outlier13,]
+
+OutFatigue = outlier(data$Fatigue, logical = TRUE)
+sum(OutFatigue)
+Find_outlier14 = which(OutFatigue == TRUE, arr.ind = TRUE)
+OutFatigue
+Find_outlier14
+data = data[-Find_outlier14,]
+
+OutWeightLoss = outlier(data$Weight.Loss, logical = TRUE)
+sum(OutWeightLoss)
+Find_outlier15 = which(OutWeightLoss == TRUE, arr.ind = TRUE)
+OutWeightLoss
+Find_outlier15
+data = data[-Find_outlier15,]
+
+OutBreathShortness = outlier(data$Shortness.of.Breath, logical = TRUE)
+sum(OutBreathShortness)
+Find_outlier16 = which(OutBreathShortness == TRUE, arr.ind = TRUE)
+OutBreathShortness
+Find_outlier16
+data = data[-Find_outlier16,]
+
+OutWheezing = outlier(data$Wheezing, logical = TRUE)
+sum(OutWheezing)
+Find_outlier17 = which(OutWheezing == TRUE, arr.ind = TRUE)
+OutWheezing
+Find_outlier17
+data = data[-Find_outlier17,]
+
+OutSwallow = outlier(data$Swallowing.Difficulty, logical = TRUE)
+sum(OutSwallow)
+Find_outlier18 = which(OutSwallow == TRUE, arr.ind = TRUE)
+OutSwallow
+Find_outlier18
+data = data[-Find_outlier18,]
+
+OutClubbing = outlier(data$Clubbing.of.Finger.Nails, logical = TRUE)
+sum(OutClubbing)
+Find_outlier19 = which(OutClubbing == TRUE, arr.ind = TRUE)
+OutClubbing
+Find_outlier19
+data = data[-Find_outlier19,]
+
+OutCold = outlier(data$Frequent.Cold, logical = TRUE)
+sum(OutCold)
+Find_outlier20 = which(OutCold == TRUE, arr.ind = TRUE)
+OutCold
+Find_outlier20
+data = data[-Find_outlier20,]
+
+OutDryCough = data(CancerSet$Dry.Cough, logical = TRUE)
+sum(OutDryCough)
+Find_outlier21 = which(OutDryCough == TRUE, arr.ind = TRUE)
+OutDryCough
+Find_outlier21
+data = data[-Find_outlier21,]
+
+OutSnoring = outlier(data$Snoring, logical = TRUE)
+sum(OutSnoring)
+Find_outlier22 = which(OutSnoring == TRUE, arr.ind = TRUE)
+OutSnoring
+Find_outlier22
+data = data[-Find_outlier22,]
+```
+
+#### Data before removing the outliers:
+
+![](images/Screenshot%202023-12-01%20093619.png)
+
+![](images/Screenshot%202023-12-01%20093649.png)
+
+```{r}
+summary(data)
+
+str(data)
+```
+
+################### 
+
+#### Data after removing the outliers:
+
+![](images/Screenshot%202023-12-01%20095641.png)
+
+![](images/Screenshot%202023-12-01%20095707.png)
+
+```{r}
+summary(data)
+
+str(data)
+```
+
+### Data transformation:
+
+#### Encoding categorical data:
+
+For the "Level" attribute, we can't calculate correlation or covariance
+on non-numeric data, so we converted this attribute to an ordered
+factor, then to a numeric vector.
+
+```{r}
+level_factor <- factor(data$Level,  levels = c("Low","Medium","High"), ordered = TRUE)
+print(level_factor)
+level_factor <- as.numeric(level_factor)
+```
+
+Other than that, the data is clear, has balanced values and has no
+intervals that needs discretization, therefore, our data does not need
+any transformation.
+
+## 5- Data mining techniques
+
+We used both **Classification** and **Clustering** on our dataset. We
+used set.seed() method for each technique to make the results
+reproducible.
+
+-   Classification: is a supervised learning technique used to predict
+    categorical or discrete class labels based on input features. In the
+    context of lung cancer data analysis.
+
+We used classification to predict the level or severity of lung cancer
+based on various attributes such as age, gender, genetic risk, and
+smoking habits. This technique included deviding the dataset into two
+sets: **Training set** and a **testing set**.
+
+1.  First splitting was 90% training set, and 10% testing set.
+
+2.  Second splitting was 80% training set, and 20% testing set.
+
+3.  Third splitting was 70% training set, and 30% testing set.
+
+Calculating Information gain, gain ratio and gini index for each
+splitting.
+
+Then we evaluated our models using a **Confusion Matrix,** which gave us
+the accuracy and cost-sensitive measures of our data.
+
+The R packages that we used: party, partykit, RWeka,caret, rpart and
+rpart.plot.
+
+The R methods that we used: createDataPartition , train , trainControl ,
+repart.plot , ctree , plot, table , predict, confusionMatrix. These
+methods allowed us to split our data into two subsets, building 9
+decision trees, testing prediction and evaluate our models.
+
+-   Clustering: is an unsupervised learning technique used to group
+    similar data points together based on their intrinsic
+    characteristics. In the context of lung cancer data analysis,
+    clustering helped us identify subgroups of patients with similar
+    attributes or risk factors **without the need of the class label
+    "Level".**
+
+First, we selected all of our dataset's attributes except "Patient Id"
+and "Level", then we used the **K-mean** **algorithm**, which is an
+algorithm that produces K clusters, where each cluster is represented by
+the center point of the cluster and assigns each object to the nearest
+cluster. The algorithm iteratively recalculates the center and reassigns
+the object until the center point of each cluster does not change that
+means the object in the right cluster.
+
+We tried 3 different K then we calculated the average silhouette width
+for each K. The model that has the optimal number of clusters is 5-Mean
+since it has no overlapping between clusters comparing to the other
+models.
+
+In addition, we used fviz_nbclust() method, which gave us the best
+number of clusters for our data, which was **k=5**.
+
+The R packages that we used: factoextra, cluster, NbClust.
+
+The R methods that we used: fviz_cluster , fviz_silhouette, kmeans , cat
+, silhouette , calculate_bcubed_metrics , fviz_nbclust.
+
+## 6- Evaluation and Comparison
+
+-   **Classification (90% training, 10% testing):**
+
+    ![](images/Screenshot%202023-12-02%20062622.png)
+
+    ![](images/Screenshot%202023-12-02%20062649.png){width="296"}
+
+    ![](images/Screenshot%202023-12-02%20063104.png)
+
+-   **Classification (80% training, 20% testing):**
+
+    ![](images/Screenshot%202023-12-02%20062718.png)
+
+    ![](images/Screenshot%202023-12-02%20062731.png){width="296"}
+
+![](images/Screenshot%202023-12-02%20043722.png)
+
+-   **Classification (70% training, 30% testing):**
+
+    ![](images/Screenshot%202023-12-02%20062749.png)
+
+    ![](images/Screenshot%202023-12-02%20062801.png){width="296"}
+
+![](images/Screenshot%202023-12-02%20044006.png)
+
+-   **Clustering (K = 2):**
+
+    ![](images/Screenshot%202023-12-02%20044342.png)
+
+    ![](images/Screenshot%202023-12-02%20044405.png)
+
+<!-- -->
+
+-   **Clustering (K = 3):**
+
+![](images/Screenshot%202023-12-02%20044603.png)
+
+![](images/Screenshot%202023-12-02%20044546.png)
+
+-   **Clustering (K = 5):**
+
+![](images/Screenshot%202023-12-02%20044631.png)
+
+![](images/Screenshot%202023-12-02%20044619.png)
+
+-   **Optimal number of clusters:**
+
+![](images/Screenshot%202023-12-02%20044837.png)
+
+## 7- Findings
+
+Initially, we meticulously collected our dataset, thoroughly
+understanding each attribute and how its interplay with others, all in
+service of our primary objective. Employing diverse plotting techniques
+that visualized the intricate relationships between these attributes.
+Subsequently, our focus shifted to preprocessing and cleaning the data
+by removing null/missing values, redundant data, outliers, and the like.
+Our culminating steps involved delving into classification and
+clustering methodologies.
+
+-   **In Classification:**
+
+The accuracy in the three different evaluations models is different:
+
+-   The 90% training data , 10% test data has a 100% accuracy.
+
+-   The 80% training data , 20% test data has a 100% accuracy.
+
+-   The 70% training data , 30% test data has a 100% accuracy.
+
+Thus, we can use any model since all of them has the highest accuracy of
+100%. We preffered using the 70/30 model.
+
+From the 70/30 tree plot we can see that the root of our tree is the
+"Genetic risk" attribute, if the value of "Genetic Risk" is less than or
+equal to 3, the prediction of the Level of lung cancer is "Low". If the
+value of "Genetic Risk" is greater than 3, the prediction of the Level
+of lung cancer is "Medium".
+
+-   **In Clustering:**
+
+For clustering, we chose three random numbers which are 2,3,5 we used
+fviz_cluster() to get the whole cluster, then we used the silhouette()
+method that gives the average of each cluster in the whole cluster then
+we calculated the average silhouette width for each K. The model that
+has the optimal number of clusters is 5-Mean since it has the least
+overlapping between clusters comparing to the other models.
+
+-   When k=2: the first silhouette is 0.22 with 71 observations , in the
+    second the silhouette is 0.62 with 20 observations and the total
+    number of sum square was 19.4%.
+
+    The average of silhouette width is 0.31.
+
+-   When k=3: the first silhouette is 0.42 with 30 observations , in the
+    second the silhouette is 0.34 with 51 observations, , in the third
+    the silhouette is 1.00 with 10 observations and the total number of
+    sum square was 36.4%.
+
+    The average of silhouette width is 0.44.
+
+-   When k=5: the first silhouette is 1.00 with 10 observations , in the
+    second the silhouette is 0.94 with 31 observations, , in the third
+    the silhouette is 1.00 with 10 observations, in the fourth the
+    silhouette is 0.50 with 20 observations, in the fifth the silhouette
+    is 0.55 with 20 observations and the total number of sum square was
+    85.2%.
+
+    The average of silhouette width is 0.77.
+
+We observed that in cluster 5 objects have higher chance of having high
+leve based on the similarity of the attributes increased on the other
+hand the other clusters has low chance of having high leve.
+
+In the end, the best number of clusters and what will give as the best
+clusters of our data values is when k=5 since its average of silhouette
+is 0.77, which is closest to 1 and based on the elbow method.
+
+it is more appropriate to use classification techniques rather than
+clustering techniques.
+
+Classification techniques are used when there is a known set of classes
+or categories, and the goal is to assign new instances to one of these
+predefined classes. In this project, the goal is to find the key risk
+factors associated with lung cancer. The dataset contains information on
+various attributes such as age, gender, air pollution exposure, alcohol
+use, and more. The ultimate objective is to analyze the dataset and
+identify the key risk factors associated with lung cancer. This fits the
+problem of classification, where the aim is to classify patients into
+different risk categories based on their attributes.
+
+On the other hand, clustering techniques are used when there are no
+predefined classes or categories, and the goal is to discover inherent
+patterns or groupings in the data. Clustering algorithms would be more
+suitable if the objective of the project was to group patients based on
+similarities in their attributes, without prior knowledge of the risk
+factors or classes.
+
+Therefore, in this lung cancer data mining project, the focus is on
+analyzing the dataset, identifying risk factors, and studying the
+relationship between different attributes and the occurrence of lung
+cancer. Classification techniques would be more appropriate for
+achieving these goals.
+
+## 8- Code:
+
+```{r}
+
+## 6- Importing data
+
+setwd("~/IT326 Project")
+data <- read.csv("cancer patient data sets.csv")
+View(data)
+### We imported the dataset from our working directory.
+
+str(data)
+### Our dataset has 26 attributes and 1000 observations.
+### Also, every attribue of the dataset is an integer, Patient.Id and Level.
+### Patient.Id is nominal, Age is numiric, Gender is binary and the rest are ordinal.
+
+is.na(data)
+### The dataset has no missing values.
+
+### Sample:
+
+library(dplyr)
+samp <- data[, c(2,3,4,9,12, 13, 26)]
+mySample <- sample_n(samp, 50)
+print(mySample)
+### We selected 50 observations from the attributes 2,3,4,9,12,13 and 26 as a sample for our dataset.
+
+
+## 7- statistical measurements 
+
+summary(data$Age)
+### calculating the min, 1st quartile, Median, mean, 3rd quartile, and the max of the age attribute.
+
+range(data$Age)
+### The ages of the patients falls in the range of 14-73 years old.
+
+var(data$Age)
+sd(data$Age)
+### We calculated the variance of the age attribute which is 144.13, thus the standard devaition is indeed around 12.
+### These values imply that the data is dispersed and is far from the mean, due to the outliers that need to be smoothed later on.
+
+
+level_factor <- factor(data$Level,  levels = c("Low","Medium","High"), ordered = TRUE)
+print(level_factor)
+level_factor <- as.numeric(level_factor)
+### We can't calculate correlation or covariance on non-numeric data, so we converted the Level attribute to an ordered factor, then to a numeric vector.
+
+cor(level_factor, data$Age)
+### Correlation of Level  and age attributes is positive hence, the attributes are correlated.
+
+cor(level_factor, data$Gender)
+### There is a negative correlation between the gender of the patients and the Level of lung cancer, so these variables are independent, removing Gender attributes is preffered.
+
+cor(level_factor, data$Genetic.Risk)
+### There is a strong positive correlation between the Level of lung cancer and the genetic risk, so these variables are dependant.
+
+cov(level_factor, data$Obesity)
+### Covariance is greater than 1, meaning that Level of lung cancer and the Obesity have a positive linear relationship.
+
+cov(level_factor, data$Smoking)
+### Covariance is greater than 1, meaning that Level of lung cancer and Smoking have a positive linear relationship.
+
+
+## Graphs and Tables
+
+hist(data$Smoking)
+### The Histogram shows the level frequency of Smoking in patients.
+### we noticed that the highest frequency was when the level of smoking of the patient is within the range [1-3] and [7] and it illustrates there is a lot of outliers in the dataset.
+
+hist(data$Alcohol.use)
+### The Histogram shows the level frequency of alcohol use in patients.
+### we noticed that the highest frequency was when the level Alcohol use within this range [1-2] and [7-8].
+
+hist(data$Air.Pollution)
+### The Histogram shows the level frequency of Air pollution in patients.
+### we noticed that the highest frequency was when the level Air pollution in the 6 and it illustrates there is a lot of outliers in the dataset.
+
+plot(data$Dry.Cough, data$Smoking)
+### The scatter plot shows that there is no relation between Dry cough and Smoking.
+
+plot(data$Dust.Allergy, data$Chest.Pain)
+### The scatter plot shows that there is no relation between Dust Allergy and Chest pain.
+
+plot(data$Air.Pollution, data$Chest.Pain)
+### The scatter plot shows that there is no relation between Air pollution and Chest pain.
+
+boxplot(data$Age)
+### The age boxplot shows that the average age of the patients lies between 30 and 40 years, in addition to an outlier in age attribute.
+
+boxplot(data$Air.Pollution ~ data$Level)
+### The boxplot show there is outliers and Most of the values fall in the medium range and there is no relation between increasing the level of Air pollution and increasing level of lung cancer.
+
+boxplot(data$Dust.Allergy ~ data$Level)
+### The boxplot show there is outliers and Most of the values fall in the medium range and there is a relation between increasing the level Dust Allergy and increasing level lung cancer.
+
+boxplot(data$Coughing.of.Blood ~ data$Level)
+### The boxplot shows that most of the values fall in the low range and there is a relation between increasing the level coughing of blood and increasing level lung cancer, there is outliers too which needs to be smoothed.
+
+boxplot(data$Fatigue ~ data$Level)
+### The boxplot show there is no outliers and Most of the values fall in the High range and there is a positive relation between increasing the level fatigue and increasing level of lung cancer.
+
+boxplot(data$Shortness.of.Breath ~ data$Level)
+### The boxplot show there is an outlier and most of the values fall in the medium range and there is a positive relation between increasing the level shortness of breath and increasing level of lung cancer.
+
+boxplot(data$Wheezing ~ data$Level)
+### The boxplot show there is outliers and Most of the values fall in the high range and there is a relation between the level wheezing and the level of lung cancer.
+
+
+## Data Cleaning
+
+data <- data[, c(2,3,5:26)]
+### Removed the index attribute, we already have Patient Id attribute.
+### Removed The Gender attribute since there is a negative correlation between it and the class label.
+
+
+### Detecting Outliers
+
+library(outliers)
+
+OutAge = outlier(data$Age, logical = TRUE)
+sum(OutAge)
+Find_outlier1 = which(OutAge == TRUE, arr.ind = TRUE)
+OutAge
+Find_outlier1
+data = data[-Find_outlier1,]
+### Smoothing outliers when present.
+### Repeat process to smooth all outliers in the dataset.
+
+OutAirP = outlier(data$Air.Pollution, logical = TRUE)
+sum(OutAirP)
+Find_outlier2 = which(OutAirP == TRUE, arr.ind = TRUE)
+OutAirP
+Find_outlier2
+data = data[-Find_outlier2,]
+
+OutAlcohol = outlier(data$Alcohol.use, logical = TRUE)
+sum(OutAlcohol)
+Find_outlier3 = which(OutAlcohol == TRUE, arr.ind = TRUE)
+OutAlcohol
+Find_outlier3
+data = data[-Find_outlier3,]
+
+OutDust = outlier(data$Dust.Allergy, logical = TRUE)
+sum(OutDust)
+Find_outlier4 = which(OutDust == TRUE, arr.ind = TRUE)
+OutDust
+Find_outlier4
+data = data[-Find_outlier4,]
+
+OutOccu = outlier(data$OccuPational.Hazards, logical = TRUE)
+sum(OutOccu)
+Find_outlier5 = which(OutOccu == TRUE, arr.ind = TRUE)
+OutOccu
+Find_outlier5
+data = data[-Find_outlier5,]
+
+OutGenetic = outlier(data$Genetic.Risk, logical = TRUE)
+sum(OutGenetic)
+Find_outlier6 = which(OutGenetic == TRUE, arr.ind = TRUE)
+OutGenetic
+Find_outlier6
+data = data[-Find_outlier6,]
+
+OutChroncDisease = outlier(data$chronic.Lung.Disease, logical = TRUE)
+sum(OutChroncDisease)
+Find_outlier7 = which(OutChroncDisease == TRUE, arr.ind = TRUE)
+OutChroncDisease
+Find_outlier7
+data = data[-Find_outlier7,]
+
+OutDiet = outlier(data$Balanced.Diet, logical = TRUE)
+sum(OutDiet)
+Find_outlier8 = which(OutDiet == TRUE, arr.ind = TRUE)
+OutDiet
+Find_outlier8
+data = data[-Find_outlier8,]
+
+OutObesity = outlier(data$Obesity, logical = TRUE)
+sum(OutObesity)
+Find_outlier9 = which(OutObesity == TRUE, arr.ind = TRUE)
+OutObesity
+Find_outlier9
+data = data[-Find_outlier9,]
+
+OutSmoking = outlier(data$Smoking, logical = TRUE)
+sum(OutSmoking)
+Find_outlier10 = which(OutSmoking == TRUE, arr.ind = TRUE)
+OutSmoking
+Find_outlier10
+data = data[-Find_outlier10,]
+
+OutPassiveS= outlier(data$Passive.Smoker, logical = TRUE)
+sum(OutPassiveS)
+Find_outlier11 = which(OutPassiveS == TRUE, arr.ind = TRUE)
+OutPassiveS
+Find_outlier11
+data = data[-Find_outlier11,]
+
+OutChestPain = outlier(data$Chest.Pain, logical = TRUE)
+sum(OutChestPain)
+Find_outlier12 = which(OutChestPain == TRUE, arr.ind = TRUE)
+OutChestPain
+Find_outlier12
+data = data[-Find_outlier12,]
+
+OutBloodCoughing = outlier(data$Coughing.of.Blood, logical = TRUE)
+sum(OutBloodCoughing)
+Find_outlier13 = which(OutBloodCoughing == TRUE, arr.ind = TRUE)
+OutBloodCoughing
+Find_outlier13
+data = data[-Find_outlier13,]
+
+OutFatigue = outlier(data$Fatigue, logical = TRUE)
+sum(OutFatigue)
+Find_outlier14 = which(OutFatigue == TRUE, arr.ind = TRUE)
+OutFatigue
+Find_outlier14
+data = data[-Find_outlier14,]
+
+OutWeightLoss = outlier(data$Weight.Loss, logical = TRUE)
+sum(OutWeightLoss)
+Find_outlier15 = which(OutWeightLoss == TRUE, arr.ind = TRUE)
+OutWeightLoss
+Find_outlier15
+data = data[-Find_outlier15,]
+
+OutBreathShortness = outlier(data$Shortness.of.Breath, logical = TRUE)
+sum(OutBreathShortness)
+Find_outlier16 = which(OutBreathShortness == TRUE, arr.ind = TRUE)
+OutBreathShortness
+Find_outlier16
+data = data[-Find_outlier16,]
+
+OutWheezing = outlier(data$Wheezing, logical = TRUE)
+sum(OutWheezing)
+Find_outlier17 = which(OutWheezing == TRUE, arr.ind = TRUE)
+OutWheezing
+Find_outlier17
+data = data[-Find_outlier17,]
+
+OutSwallow = outlier(data$Swallowing.Difficulty, logical = TRUE)
+sum(OutSwallow)
+Find_outlier18 = which(OutSwallow == TRUE, arr.ind = TRUE)
+OutSwallow
+Find_outlier18
+data = data[-Find_outlier18,]
+
+OutClubbing = outlier(data$Clubbing.of.Finger.Nails, logical = TRUE)
+sum(OutClubbing)
+Find_outlier19 = which(OutClubbing == TRUE, arr.ind = TRUE)
+OutClubbing
+Find_outlier19
+data = data[-Find_outlier19,]
+
+OutCold = outlier(data$Frequent.Cold, logical = TRUE)
+sum(OutCold)
+Find_outlier20 = which(OutCold == TRUE, arr.ind = TRUE)
+OutCold
+Find_outlier20
+data = data[-Find_outlier20,]
+
+OutDryCough = outlier(data$Dry.Cough, logical = TRUE)
+sum(OutDryCough)
+Find_outlier21 = which(OutDryCough == TRUE, arr.ind = TRUE)
+OutDryCough
+Find_outlier21
+data = data[-Find_outlier21,]
+
+OutSnoring = outlier(data$Snoring, logical = TRUE)
+sum(OutSnoring)
+Find_outlier22 = which(OutSnoring == TRUE, arr.ind = TRUE)
+OutSnoring
+Find_outlier22
+data = data[-Find_outlier22,]
+
+print(data)
+### Printing the data after smoothing.
+
+
+## Data Transformation
+
+## Convert the response variable 'Level' to a factor:
+data$Level <- as.factor(data$Level)
+#### converting the "Level" attribute allows us to enhance data manipulation, gives us better model performance and increased analysis clarity.
+
+#### Other than that, the data has balanced values and has no intervals that needs discretization, therefore, our data does not need any transformation.
+
+
+## Balancing the data:
+
+library(caret)
+
+## We will use the SMOTE algorithm to balance the data.
+
+## Check class distribution
+## There is 133 low, and 10 medium.
+class_counts <- table(data$Level)
+print(class_counts)
+
+## Check if the data is imbalanced
+is_imbalanced <- any(class_counts < 10)  # Adjust the threshold as desired
+if (is_imbalanced) {
+## Balance the data using the SMOTE algorithm
+balanced_data <- SMOTE(Level ~ ., data, perc.over = 100, k = 5, perc.under = 200)
+  
+## Check class distribution of the balanced data
+balanced_class_counts <- table(balanced_data$Level)
+print(balanced_class_counts)
+  
+# Use the balanced data for further analysis
+# ...
+} else {
+print("Data is already balanced.")
+
+}
+
+#### According to the code above, our data is *balanced*.
+
+
+
+## Classification
+
+We conducted an evaluation of decision tree classifiers for a classification task, employing three distinct splitting criteria: Gini index, gain ratio, and information gain. In order to ensure the reliability and robustness of our classifiers, we utilized k-fold cross-validation to partition the data into training and test sets. Specifically, we experimented with three different fold sizes: 10, 5, and 3.
+
+To assess the performance of each method, we employed several metrics:
+
+1. Accuracy: This metric measures the percentage of test set tuples that are correctly classified by the decision tree classifier.
+
+2. Precision (also known as exactness): Precision calculates the percentage of tuples labeled as positive that are genuinely positive. It is an indicator of the classifier''s ability to accurately identify positive instances.
+
+3. Sensitivity (also known as Recall): Sensitivity determines the proportion of actual positive cases that are correctly identified by the classifier. It measures the classifier''s effectiveness in capturing positive instances.
+
+4. Specificity: Specificity quantifies the proportion of actual negative cases that are correctly identified by the classifier. It indicates the classifier''s capability to accurately discern negative instances.
+
+Based on our evaluation, we found that 10-fold cross-validation using the gain ratio criterion outperformed the other methods for our dataset. It exhibited the highest performance across the examined metrics, making it the most reliable and robust approach for our classification task.
+
+
+#### Splitting the dataset into 2 subsets: 90% training set, and 10% testing set.
+
+library(party)
+library(partykit)
+library(RWeka)
+library(caret)
+library(rpart)
+library(rpart.plot)
+### Load libraries.
+
+## Set the seed for reproducibility
+set.seed(1234)
+
+## Stratified partitioning of the data into 90% training set and 10% testing set
+ind <- createDataPartition(data$Level, p = 0.9, list = FALSE)
+train_data <- data[ind, ]
+test_data <- data[-ind, ]
+
+## Display the dimensions of the training set (129) and the testing set (24).
+dim(train_data)
+dim(test_data)
+
+## Define the formula for decision tree models
+myFormula <- Level ~ Age + Air.Pollution + Alcohol.use + Dust.Allergy + OccuPational.Hazards + Genetic.Risk + chronic.Lung.Disease + Balanced.Diet + Obesity + Smoking + Passive.Smoker + Chest.Pain + Coughing.of.Blood + Fatigue + Weight.Loss + Shortness.of.Breath + Wheezing + Swallowing.Difficulty + Clubbing.of.Finger.Nails + Frequent.Cold + Dry.Cough + Snoring
+
+
+### Information gain:
+
+dataset_ctree <- ctree(myFormula, data = train_data)
+
+## Display the confusion matrix for the training set
+table(predict(dataset_ctree), train_data$Level)
+
+## Display the ctree model details
+print(dataset_ctree)
+
+## Plot the ctree model
+plot(dataset_ctree)
+
+
+As seen in the graph the split is based on the "Genetic risk" attribute
+, f the value of "Genetic Risk" is *less than or equal to 3*, the
+prediction is **"Low"** and there are 120 instances in the group. If the
+value of "Genetic Risk" is *greater than 3*, the prediction is
+**"Medium"** and there are 9 instances in the group.
+
+The tree has 1 inner node (root) and 2 terminal nodes (leaves).
+
+
+## Predict on the testing set using the ctree model
+testPred <- predict(dataset_ctree, newdata = test_data)
+
+## Evaluate model performance using confusionMatrix for information gain
+results <- confusionMatrix(testPred, test_data$Level, positive = "Low")
+print(results)
+
+
+### Gain ratio:
+
+C45Fit <- J48(myFormula, data = train_data)
+
+## Display the confusion matrix for the training set
+table(predict(C45Fit), train_data$Level)
+
+## Display the C4.5 decision tree model details
+print(C45Fit)
+
+## Plot the C4.5 decision tree model
+plot(C45Fit)
+
+As seen in the graph the split is based on "Genetic risk" attribute. If
+the value of "Genetic Risk" is *less than or equal to 3*, the prediction
+is **"Low"** and there are 120 instances in the group . If the value of
+"Genetic Risk" is *greater than 3*, the prediction is **"Medium"** and
+there are 9 instances in the group.
+
+
+## Predict on the testing set using the C4.5 decision tree model
+testPred <- predict(C45Fit, newdata = test_data)
+
+## Evaluate model performance using confusionMatrix for gain ratio
+results <- confusionMatrix(testPred, test_data$Level, positive = "Low")
+print(results)
+
+
+### Gini index:
+
+fit.tree <- rpart(myFormula, data = train_data, method = "class", cp = 0.008)
+
+## Display the Gini decision tree model details
+print(fit.tree)
+
+## Plot the Gini decision tree model
+rpart.plot(fit.tree)
+
+As seen in the graph the split is based on "Alcohol use" attribute, if
+alcohol use is *less than 5* then go to **"Low"**, if the alcohol use is
+*greater than 5* then the prediction is **"Medium".**
+
+
+## Predict on the testing set using the Gini decision tree model
+testPred <- predict(fit.tree, newdata = test_data, type = "class")
+
+## Evaluate model performance using confusionMatrix for Gini index
+results <- confusionMatrix(testPred, test_data$Level, positive = "Low")
+print(results)
+
+
+#### Table showing the results: 
+
+|                                  |      |          |            |
+|:--------------------------------:|:----:|:--------:|:----------:|
+| 80% training set 20% testing set |  IG  | IG ratio | Gini index |
+|             Accuracy             | 100% |   100%   |    100%    |
+|            Prrecision            | 100% |   100%   |    100%    |
+|           Sensitivity            | 100% |   100%   |    100%    |
+|           Specificity            | 100% |   100%   |    100%    |
+
+
+#### Splitting the dataset into 2 subsets: 80% training set, and 20% testing set.
+
+## Set the seed for reproducibility
+set.seed(1234)
+
+##  Partition the data into 2 sets, 80% training set 20% testing set.
+ind <- sample(2, nrow(data), replace = TRUE, prob = c(0.80, 0.20))
+train_data <- data[ind == 1, ]
+test_data <- data[ind == 2, ]
+
+## Display the dimensions of the training set (117 rows), and the dimensions of the testing set (24 rows).
+dim(train_data)
+dim(test_data)
+
+## Define the formula for decision tree models.
+myFormula <- Level ~ Age + Air.Pollution + Alcohol.use + Dust.Allergy + OccuPational.Hazards + Genetic.Risk + chronic.Lung.Disease + Balanced.Diet + Obesity + Smoking + Passive.Smoker + Chest.Pain + Coughing.of.Blood + Fatigue + Weight.Loss + Shortness.of.Breath + Wheezing + Swallowing.Difficulty + Clubbing.of.Finger.Nails + Frequent.Cold + Dry.Cough + Snoring
+
+
+### Information gain:
+
+
+dataset_ctree <- ctree(myFormula, data = train_data)
+
+## Display the confusion matrix for the training set.
+table(predict(dataset_ctree), train_data$Level)
+
+## Display the ctree model details.
+print(dataset_ctree)
+
+
+## Plot the ctree model.
+plot(dataset_ctree)
+
+
+As seen in the graph the splitting attribute is "Genetic risk", If the
+value of "Genetic Risk" is *less than or equal to 3*, the prediction is
+**"Low"** and there are 109 instances in this group. If the value of
+"Genetic Risk" is *greater than 3*, the prediction is **"Medium"** and
+there are 8 instances in this group.
+
+
+## Predict on the testing set using the ctree model.
+testPred <- predict(dataset_ctree, newdata = test_data)
+
+## Evaluate model performance using confusionMatrix for information gain.
+results <- confusionMatrix(testPred, test_data$Level, positive = "Low")
+print(results)
+
+
+### Gain ratio:
+
+
+C45Fit <- J48(myFormula, data = train_data)
+
+## Display the confusion matrix for the training set.
+table(predict(C45Fit), train_data$Level)
+
+## Display the C4.5 decision tree model details.
+print(C45Fit)
+
+
+## Plot the C4.5 decision tree model.
+plot(C45Fit)
+
+
+As seen in graph the splitting attribute is "Genetic risk", If the value
+of "Genetic Risk" is *less than or equal to 3*, the prediction is
+**"Low"** and there are 109 instances in this group. If the value of
+"Genetic Risk" is *greater than 3*, the prediction is **"Medium"** and
+there are 8 instances in this group. The tree has a size of 3, which
+includes the root node and two leaves.
+
+
+
+## Predict on the testing set using the C4.5 decision tree model.
+testPred <- predict(C45Fit, newdata = test_data)
+
+## Evaluate model performance using confusionMatrix for gain ratio.
+results <- confusionMatrix(testPred, test_data$Level, positive = "Low")
+print(results)
+
+
+### Gini index:
+
+fit.tree <- rpart(myFormula, data = train_data, method = "class", cp = 0.008)
+
+## Display the Gini decision tree model details.
+print(fit.tree)
+
+## Plot the Gini decision tree model.
+rpart.plot(fit.tree)
+
+As seen in the graph the splitting attribute is "Alcohol use", If
+"Alcohol use" is less than 4.5 , the prediction is **"Low"**. If
+"Alcohol use" is greater or equal to 4.5, the prediction is
+**"Medium"**.
+
+
+## Predict on the testing set using the Gini decision tree model.
+testPred <- predict(fit.tree, newdata = test_data, type = "class")
+
+## Evaluate model performance using confusionMatrix for Gini index.
+results <- confusionMatrix(testPred, test_data$Level, positive = "Low")
+print(results)
+
+
+#### Table showing the results: 
+
+|                                  |      |          |            |
+|:--------------------------------:|:----:|:--------:|:----------:|
+| 80% training set 20% testing set |  IG  | IG ratio | Gini index |
+|             Accuracy             | 100% |   100%   |    100%    |
+|            Precision             | 100% |   100%   |    100%    |
+|           Sensitivity            | 100% |   100%   |    100%    |
+|           Specificity            | 100% |   100%   |    100%    |
+
+
+
+#### Splitting the dataset into 2 subsets: 70% training set, and 30% testing set.
+
+
+## Set the seed for reproducibility
+set.seed(1234)
+
+##  Partition the data into 2 sets, 70% training set 30% testing set.
+ind <- sample(2, nrow(data), replace = TRUE, prob = c(0.70, 0.30))
+train_data <- data[ind == 1, ]
+test_data <- data[ind == 2, ]
+
+## Display the dimensions of the training set (100 rows), and the dimensions of the testing set (24 rows).
+dim(train_data)
+dim(test_data)
+
+## Define the formula for decision tree models.
+myFormula <- Level ~ Age + Air.Pollution + Alcohol.use + Dust.Allergy + OccuPational.Hazards + Genetic.Risk + chronic.Lung.Disease + Balanced.Diet + Obesity + Smoking + Passive.Smoker + Chest.Pain + Coughing.of.Blood + Fatigue + Weight.Loss + Shortness.of.Breath + Wheezing + Swallowing.Difficulty + Clubbing.of.Finger.Nails + Frequent.Cold + Dry.Cough + Snoring
+
+
+
+### Information gain:
+
+dataset_ctree <- ctree(myFormula, data = train_data)
+
+## Display the confusion matrix for the training set.
+table(predict(dataset_ctree), train_data$Level)
+
+## Display the ctree model details.
+print(dataset_ctree)
+
+## Plot the ctree model.
+plot(dataset_ctree)
+
+As seen in the graph the split is based on the "Genetic risk" attribute
+, f the value of "Genetic Risk" is *less than or equal to 3*, the
+prediction is **"Low"** and there are 109 instances in the group. If the
+value of "Genetic Risk" is *greater than 3*, the prediction is
+**"Medium"** and there are 8 instances in the group.
+
+## Predict on the testing set using the ctree model.
+testPred <- predict(dataset_ctree, newdata = test_data)
+
+## Evaluate model performance using confusionMatrix for information gain.
+results <- confusionMatrix(testPred, test_data$Level, positive = "Low")
+print(results)
+
+
+### Gain ratio:
+
+C45Fit <- J48(myFormula, data = train_data)
+
+## Display the confusion matrix for the training set.
+table(predict(C45Fit), train_data$Level)
+
+## Display the C4.5 decision tree model details.
+print(C45Fit)
+
+## Plot the C4.5 decision tree model.
+plot(C45Fit)
+
+
+As seen in the graph the split is based on the "Genetic risk" attribute
+, f the value of "Genetic Risk" is *less than or equal to 3*, the
+prediction is **"Low"** and there are 109 instances in the group. If the
+value of "Genetic Risk" is *greater than 3*, the prediction is
+**"Medium"** and there are 8 instances in the group.
+
+The tree has a size of 3, and has2 leaves.
+
+## Predict on the testing set using the C4.5 decision tree model.
+testPred <- predict(C45Fit, newdata = test_data)
+
+## Evaluate model performance using confusionMatrix for gain ratio.
+results <- confusionMatrix(testPred, test_data$Level, positive = "Low")
+print(results)
+
+
+### Gini index:
+
+fit.tree <- rpart(myFormula, data = train_data, method = "class", cp = 0.008)
+
+## Display the Gini decision tree model details.
+print(fit.tree)
+
+## Plot the Gini decision tree model.
+rpart.plot(fit.tree)
+
+As seen in the graph the splitting attribute is "Alcohol use", If
+"Alcohol use" is less than 4.5 , the prediction is **"Low"**. If
+"Alcohol use" is greater or equal to 4.5, the prediction is
+**"Medium"**.
+
+## Predict on the testing set using the Gini decision tree model.
+testPred <- predict(fit.tree, newdata = test_data, type = "class")
+
+## Evaluate model performance using confusionMatrix for Gini index.
+results <- confusionMatrix(testPred, test_data$Level, positive = "Low")
+print(results)
+
+### Table showing the results: 
+
+|                                  |      |          |            |
+|:--------------------------------:|:----:|:--------:|:----------:|
+| 70% training set 30% testing set |  IG  | IG ratio | Gini index |
+|             Accuracy             | 100% |   100%   |    100%    |
+|            Precision             | 100% |   100%   |    100%    |
+|           Sensitivity            | 100% |   100%   |    100%    |
+|           Specificity            | 100% |   100%   |    100%    |
+
+
+## Clustering:
+
+#### By applying clustering *unsupervised learning*, we will partition our dataset into groups where the data in the same group are similar to each other and the data from different groups are dissimilar.
+
+
+library(factoextra)
+library(cluster)
+library(NbClust)
+### Load libraries.
+
+
+new_data<- data[, c(-1,-24)]
+### Create a new dataset without the "index" and "Patient Id" columns (irrelevant columns (uniqe)) and class attributes ( Level) to find similarities between data.
+print(new_data)
+### Print the new dataset
+
+
+### Using k-means method:
+
+set.seed(8953)
+### setting a seed for random number generation  to make the results reproducible.
+
+
+### Data types should be transformed into numeric types before clustering.
+new_data <- scale(new_data)
+View(new_data)
+### All data is numeric.
+
+
+### we chose three random numbers which are 2,3,5.
+
+kmeans.result <- kmeans(new_data, 2)
+### run kmeans clustering to find 2 clusters.
+kmeans.result
+### print the clustering result.
+### Within cluster sum of squares by cluster: 19.4%
+
+# Get the total within-cluster sum of squares (WCSS)
+wcss <- sum(kmeans.result$tot.withinss)
+
+# Print the WCSS
+print(wcss)
+#Within cluster sum of squares by cluster:1595.704
+
+
+### visualize clustering:
+
+fviz_cluster(kmeans.result, data = new_data) 
+### it is good because there is no overlap between the clusters.
+
+silhouette <- silhouette(kmeans.result$cluster,dist(new_data))
+fviz_silhouette(silhouette)
+### average for each cluster.
+### k-means clustering with estimating k and initializations.
+### The average silhouette width is 0.31, indicating reasonable clustering quality.
+
+### A higher precision indicates more accurate assignments within each cluster, while a higher recall indicates a better ability to capture the true cluster membership.
+cluster_assignments <- c(kmeans.result$cluster)
+ground_truth_labels <- c(data$Level)
+data2 <- data.frame(cluster = cluster_assignments, label = ground_truth_labels)
+
+
+## Function to calculate BCubed precision and recall:
+calculate_bcubed_metrics <- function(data2) {
+  n <- nrow(data2)
+  precision_sum <- 0
+  recall_sum <- 0
+  
+  for (i in 1:n) {
+    cluster <- data2$cluster[i]
+    label <- data2$label[i]
+    
+    ### Count the number of items from the same category within the same cluster:
+    same_category_same_cluster <- sum(data2$label[data2$cluster == cluster] == label)
+    
+    ### Count the total number of items in the same cluster:
+    total_same_cluster <- sum(data2$cluster == cluster)
+    
+    ### Count the total number of items with the same category:
+    total_same_category <- sum(data2$label == label)
+    
+    ### Calculate precision and recall for the current item and add them to the sums:
+    precision_sum <- precision_sum + same_category_same_cluster /total_same_cluster
+    recall_sum <- recall_sum + same_category_same_cluster / total_same_category
+  }
+  
+  ### Calculate average precision and recall:
+  precision <- precision_sum / n
+  recall <- recall_sum / n
+  
+  return(list(precision = precision, recall = recall))
+}
+
+### Calculate BCubed precision and recall:
+metrics <- calculate_bcubed_metrics(data2)
+
+### Extract precision and recall from the metrics:
+precision <- metrics$precision
+recall <- metrics$recall
+
+### Print the results:
+cat("BCubed Precision:", precision, "\n")
+cat("BCubed Recall:", recall, "\n")
+### The BCubed precision is 0.8111747, this indicates that the clustering results have a recall of approximately 0.81,  meaning that almost 81% of the data points within each cluster are correctly assigned.
+### The BCubed recall is 0.668973, this indicates that the clustering results have a recall of approximately 0.67,  meaning that almost 67% of the data points that should belong to the same cluster are correctly assigned to that cluster.
+
+
+kmeans.result <- kmeans(new_data, 3)
+### Run kmeans clustering to find 3 clusters
+kmeans.result
+### print the clustering result
+### Within cluster sum of squares by cluster:36.4%.
+
+# Get the total within-cluster sum of squares (WCSS)
+wcss <- sum(kmeans.result$tot.withinss)
+
+# Print the WCSS
+print(wcss)
+#Within cluster sum of squares by cluster: 1259.628
+
+
+### visualize clustering:
+
+fviz_cluster(kmeans.result, data = new_data) 
+### visualization suggests that there is some overlap between clusters, indicating poorer clustering quality(worst)
+
+## Cluster Validation:
+### average for each cluster:
+silhouette <- silhouette(kmeans.result$cluster,dist(new_data))
+fviz_silhouette(silhouette)
+### k-means clustering with estimating k and initializations 
+### The average silhouette width is 0.44, which is higher than for k = 2.
+
+
+
+cluster_assignments <- c(kmeans.result$cluster)
+ground_truth_labels <- c(data$Level)
+data2 <- data.frame(cluster = cluster_assignments, label = ground_truth_labels)
+
+### Function to calculate BCubed precision and recall:
+calculate_bcubed_metrics <- function(data2) {
+  n <- nrow(data2)
+  precision_sum <- 0
+  recall_sum <- 0
+  
+  for (i in 1:n) {
+    cluster <- data2$cluster[i]
+    label <- data2$label[i]
+    
+    ### Count the number of items from the same category within the same cluster:
+    same_category_same_cluster <- sum(data2$label[data2$cluster == cluster] == label)
+    
+    ### Count the total number of items in the same cluster:
+    total_same_cluster <- sum(data2$cluster == cluster)
+    
+    ### Count the total number of items with the same category:
+    total_same_category <- sum(data2$label == label)
+    
+    ### Calculate precision and recall for the current item and add them to the sums:
+    precision_sum <- precision_sum + same_category_same_cluster /total_same_cluster
+    recall_sum <- recall_sum + same_category_same_cluster / total_same_category
+  }
+  
+  ### Calculate average precision and recall:
+  precision <- precision_sum / n
+  recall <- recall_sum / n
+  
+  return(list(precision = precision, recall = recall))
+}
+
+### Calculate BCubed precision and recall:
+metrics <- calculate_bcubed_metrics(data2)
+
+### Extract precision and recall from the metrics:
+precision <- metrics$precision
+recall <- metrics$recall
+
+### Print the results:
+cat("BCubed Precision:", precision, "\n")
+cat("BCubed Recall:", recall, "\n")
+#The BCubed precision is 0.8233139, This indicates that the clustering results have a recall of approximately 0.82, meaning that around 82% of the data points within each cluster are correctly assigned.
+#The BCubed recall is 0.4736128, This indicates that the clustering results have a recall of approximately 0.47, suggesting that around 47% of the data points that should belong to the same cluster are correctly assigned to that cluster.
+
+kmeans.result <- kmeans(new_data, 5)
+### Run kmeans clustering to find 5 clusters.
+kmeans.result
+### Print the clustering result.
+### Within cluster sum of squares by cluster:85.2%
+
+# Get the total within-cluster sum of squares (WCSS)
+wcss <- sum(kmeans.result$tot.withinss)
+
+# Print the WCSS
+print(wcss)
+#Within cluster sum of squares by cluster:292.5542
+
+
+### visualize clustering:
+
+fviz_cluster(kmeans.result, data = new_data)
+### The visualization suggests that there is even more overlap between clusters, indicating further degradation in clustering quality (worst).
+
+
+### Cluster Validation:
+
+### average for each cluster:
+silhouette <- silhouette(kmeans.result$cluster,dist(new_data))
+fviz_silhouette(silhouette)
+### k-means clustering with estimating k and initializations.
+### The average silhouette width is 0.77, which is higher than for k = 2 and k = 3.
+
+
+cluster_assignments <- c(kmeans.result$cluster)
+ground_truth_labels <- c(data$Level)
+data2 <- data.frame(cluster = cluster_assignments, label = ground_truth_labels)
+
+## Function to calculate BCubed precision and recall:
+calculate_bcubed_metrics <- function(data2) {
+  n <- nrow(data2)
+  precision_sum <- 0
+  recall_sum <- 0
+  
+  for (i in 1:n) {
+    cluster <- data2$cluster[i]
+    label <- data2$label[i]
+    
+    ### Count the number of items from the same category within the same cluster:
+    same_category_same_cluster <- sum(data2$label[data2$cluster == cluster] == label)
+    
+    ### Count the total number of items in the same cluster:
+    total_same_cluster <- sum(data2$cluster == cluster)
+    
+    ### Count the total number of items with the same category:
+    total_same_category <- sum(data2$label == label)
+    
+    ### Calculate precision and recall for the current item and add them to the sums:
+    precision_sum <- precision_sum + same_category_same_cluster /total_same_cluster
+    recall_sum <- recall_sum + same_category_same_cluster / total_same_category
+  }
+  
+  ### Calculate average precision and recall:
+  precision <- precision_sum / n
+  recall <- recall_sum / n
+  
+  return(list(precision = precision, recall = recall))
+}
+
+### Calculate BCubed precision and recall:
+metrics <- calculate_bcubed_metrics(data2)
+
+### Extract precision and recall from the metrics:
+precision <- metrics$precision
+recall <- metrics$recall
+
+### Print the results:
+cat("BCubed Precision:", precision, "\n")
+cat("BCubed Recall:", recall, "\n")
+
+### The BCubed precision is 1! meaning that 100% of the data points within each cluster are correctly assigned.
+#The BCubed recall is 0.362366, this implies that the clustering results have a recall of approximately 0.4, suggesting that around 40% of the data points that should belong to the same cluster are correctly assigned to that cluster.
+
+
+## Optimal number of cluster for all clusters:
+### fviz_nbclust() with silhouette method using library(factoextra) 
+fviz_nbclust(new_data, kmeans, method = "wss")+ labs(subtitle = "Elbow method")
+### the best number of clusters and what will give us the best clusters of our data values is when k=5 from the Elbow method.
+### k = 5 achieves the highest precision and recall values among the tested values of k.
+
+|                                    |                           |                           |                           |
+|:-------------------:|:---------------:|:---------------:|:---------------:|
+|                                    |            K=2            |            K=3            |            K=5            |
+|      Average silhouette width      |           0.46            |           0.35            |           0.49            |
+| Total within-cluster sum of square |         2583.554          |         2149.403          |         2421.615          |
+|          BCubed precision          |             1             |           0.894           |           0.879           |
+|           BCubed recall            |             1             |           0.570           |           0.354           |
+|           Visualization            | The figure is shown above | The figure is shown above | The figure is shown above |
+
+## Conclusion:
+Clustering is unsupervised learning it will group objects in cluster based on similarity and dissimilarity.
+Our model will create a set of clusters for the lung cancer prediction who have similar characteristics, then these clusters will be used to predict new lung cancer prediction  results.
+We used the K-mean algorithm, which is an algorithm that produces K clusters, where each cluster is represented by the center point of the cluster and assigns each object to the nearest cluster.
+Then iteratively recalculates the center and reassigns the object until the center point of each cluster does not change that means the object in the right cluster.
+We tried 3 different K then we calculated the average silhouette width for each K.
+The model that has the optimal number of clusters is 5-Mean since it has the least overlapping between clusters comparing to the other models.
+
+
+
+```
+
+## 9- References
+
+-   <https://www.kaggle.com/datasets/thedevastator/cancer-patients-and-air-pollution-a-new-link>
+
+-   Y. Zhao, "R and Data Mining," RDataMining.com, Available:
+    <https://www.rdatamining.com/,> Accessed on: November 23, 2023.
+
+-   J. Han, M. Kamber, and J. Pei, "Data Mining: Concepts and
+    Techniques," 3rd ed., The Morgan Kaufmann Series in Data
+    Management Systems.
+
+## 10- Tasks Distribution
+
++--------------+--------------+------------------------+
+| ID           | Name         | Responsibilities       |
++:============:+:============:+:======================:+
+| 442200348    | Ashwag       | Graphs and tables,     |
+|              | Alsubaie     | Clustering.            |
++--------------+--------------+------------------------+
+| 442200924    | Ruaa AlOmar  | Graphs and tables,     |
+|              |              | Data transformation,   |
+|              |              | Clustering.            |
++--------------+--------------+------------------------+
+| 443200544    | Joud         | Data cleaning,         |
+|              | Almutairi    | Classification.        |
++--------------+--------------+------------------------+
+| 443200879    | Riham        | Statistical Measures,  |
+|              | Alangari     | Classification.        |
++--------------+--------------+------------------------+
+| 443203046    | Riyam        | Sample, Missing        |
+|              | Karbalaa     | values,                |
+|              |              | Classification, Final  |
+|              |              | report.                |
++--------------+--------------+------------------------+
